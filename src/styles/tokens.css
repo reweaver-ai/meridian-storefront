@@ -1,0 +1,17 @@
+/* Generated from design/tokens.json — the design source of truth. */
+:root {
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-ink: #23201c;
+  --color-muted: #6f6a62;
+  --color-accent: #c15f1e;
+  --color-accent-ink: #ffffff;
+  --color-success: #2e7d57;
+  --color-danger: #b03a32;
+  --color-focus: #1d4ed8;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px;
+  --radius-s: 4px; --radius-m: 8px;
+  --text-s: 13px; --text-m: 15px; --text-l: 18px; --text-xl: 24px;
+  --shadow-card: 0 1px 3px rgba(30,25,20,.12);
+}
