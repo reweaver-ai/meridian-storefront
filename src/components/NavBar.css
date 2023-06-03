@@ -1,0 +1,38 @@
+.navbar {
+  background: var(--color-surface);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.navbar__name, .navbar__author { font-size: var(--text-l); margin: 0; }
+.navbar__price, .navbar__total { font-weight: 600; }
+.navbar__img { width: 100%; border-radius: var(--radius-s); }
+.navbar__label { font-size: var(--text-s); color: var(--color-muted); }
+.navbar__input { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-2) var(--space-3); }
+.navbar__add, .navbar__submit, .navbar__cart, .navbar__close {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+.navbar__brand { font-weight: 700; color: var(--color-ink); text-decoration: none; }
+.navbar__links { display: flex; gap: var(--space-4); }
+.navbar__links a { color: var(--color-muted); text-decoration: none; }
+.navbar__list { margin: 0; padding: 0; list-style: none; }
+.navbar__row { display: flex; justify-content: space-between; padding: var(--space-2) 0; }
+.navbar__body { color: var(--color-muted); }
+.navbar :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.navbar__copy, .navbar__body, .navbar__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.navbar__cta:hover, .navbar__go:hover, .navbar__add:hover, .navbar__submit:hover, .navbar__cart:hover, .navbar__close:hover, .navbar__toggle:hover { filter: brightness(0.95); }
+.navbar__cta:active, .navbar__go:active, .navbar__add:active, .navbar__submit:active, .navbar__cart:active, .navbar__close:active, .navbar__toggle:active { transform: translateY(1px); }
+.navbar__links a:hover, .navbar__brand:hover { color: var(--color-ink); text-decoration: underline; }
+.navbar__links a:active, .navbar__brand:active, .navbar__cta:active { opacity: 0.85; }
+.navbar__detail, .navbar__fine, .navbar__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 640px) {
+  .navbar { padding: var(--space-3); }
+}
