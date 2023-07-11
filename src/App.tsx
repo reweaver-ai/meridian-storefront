@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavBar } from './components/NavBar';
 import { ProductCard } from './components/ProductCard';
+import { CartDrawer } from './components/CartDrawer';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
