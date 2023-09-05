@@ -3,6 +3,7 @@ import { NavBar } from './components/NavBar';
 import { ProductCard } from './components/ProductCard';
 import { CartDrawer } from './components/CartDrawer';
 import { Hero } from './components/Hero';
+import { CheckoutForm } from './components/CheckoutForm';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
