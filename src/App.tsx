@@ -5,6 +5,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { Hero } from './components/Hero';
 import { CheckoutForm } from './components/CheckoutForm';
 import { Footer } from './components/Footer';
+import { ReviewList } from './components/ReviewList';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
