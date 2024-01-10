@@ -6,6 +6,7 @@ import { Hero } from './components/Hero';
 import { CheckoutForm } from './components/CheckoutForm';
 import { Footer } from './components/Footer';
 import { ReviewList } from './components/ReviewList';
+import { SearchBar } from './components/SearchBar';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
@@ -29,6 +30,7 @@ export function App() {
         </section>
         <Hero title="Hero" copy="Seasonal picks from the fictional catalog." cta="Browse" />
         <Footer items={['Free returns', 'Carbon-neutral shipping', 'Lifetime repairs']} />
+        <SearchBar />
         <ReviewList reviews={[{ id: 'r1', author: 'Jamie', body: 'Held up through a full season.', stars: 5 }]} />
         <CheckoutForm totalCents={cart.reduce((s, p) => s + p.priceCents, 0)} onPlaceOrder={() => setCart([])} />
       </main>
