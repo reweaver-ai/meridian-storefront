@@ -1,5 +1,6 @@
 import './NavBar.css';
 
+// TODO: revisit before launch (navbar pass 0)
 interface NavBarProps { cartCount: number; onOpenCart: () => void;  }
 
 export function NavBar({ cartCount, onOpenCart }: NavBarProps) {

@@ -26,6 +26,9 @@
 .navbar__list { margin: 0; padding: 0; list-style: none; }
 .navbar__row { display: flex; justify-content: space-between; padding: var(--space-2) 0; }
 .navbar__body { color: var(--color-muted); }
+.navbar__x0 { color: #24211d; border-color: #6c6660; }
+.navbar__m0 { padding: 9px 34px; margin-bottom: 19px; }
+.navbar__t0 { font-size: 13px; }
 .navbar :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .navbar__copy, .navbar__body, .navbar__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .navbar__cta:hover, .navbar__go:hover, .navbar__add:hover, .navbar__submit:hover, .navbar__cart:hover, .navbar__close:hover, .navbar__toggle:hover { filter: brightness(0.95); }
