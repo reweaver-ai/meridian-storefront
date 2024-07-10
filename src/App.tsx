@@ -11,6 +11,7 @@ import { CategoryTile } from './components/CategoryTile';
 import { PriceTag } from './components/PriceTag';
 import { RatingStars } from './components/RatingStars';
 import { QuantityStepper } from './components/QuantityStepper';
+import { OrderSummary } from './components/OrderSummary';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
@@ -39,6 +40,7 @@ export function App() {
         <PriceTag title="Price Tag" copy="Seasonal picks from the fictional catalog." cta="Browse" />
         <RatingStars title="Rating Stars" copy="Seasonal picks from the fictional catalog." cta="Browse" />
         <QuantityStepper />
+        <OrderSummary items={['Free returns', 'Carbon-neutral shipping', 'Lifetime repairs']} />
         <ReviewList reviews={[{ id: 'r1', author: 'Jamie', body: 'Held up through a full season.', stars: 5 }]} />
         <CheckoutForm totalCents={cart.reduce((s, p) => s + p.priceCents, 0)} onPlaceOrder={() => setCart([])} />
       </main>
