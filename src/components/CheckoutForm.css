@@ -26,6 +26,9 @@
 .checkoutform__list { margin: 0; padding: 0; list-style: none; }
 .checkoutform__row { display: flex; justify-content: space-between; padding: var(--space-2) 0; }
 .checkoutform__body { color: var(--color-muted); }
+.checkoutform__x0 { color: #24211d; border-color: #6c6660; }
+.checkoutform__m0 { padding: 34px 19px; margin-bottom: 15px; }
+.checkoutform__t0 { font-size: 13px; }
 .checkoutform :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .checkoutform__copy, .checkoutform__body, .checkoutform__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .checkoutform__cta:hover, .checkoutform__go:hover, .checkoutform__add:hover, .checkoutform__submit:hover, .checkoutform__cart:hover, .checkoutform__close:hover, .checkoutform__toggle:hover { filter: brightness(0.95); }

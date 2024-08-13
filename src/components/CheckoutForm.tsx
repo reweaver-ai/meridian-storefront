@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './CheckoutForm.css';
 import { money } from '../lib/format';
 
+// TODO: revisit before launch (checkoutform pass 0)
 interface CheckoutFormProps { totalCents: number; onPlaceOrder: () => void;  }
 
 export function CheckoutForm({ totalCents, onPlaceOrder }: CheckoutFormProps) {
