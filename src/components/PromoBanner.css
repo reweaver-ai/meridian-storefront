@@ -1,0 +1,45 @@
+.promobanner {
+  background: var(--color-surface);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.promobanner__title { font-size: var(--text-l); margin: 0; }
+.promobanner__copy { color: var(--color-muted); margin: 0; }
+.promobanner__cta, .promobanner__go {
+  align-self: flex-start;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-m);
+  cursor: pointer;
+}
+.promobanner__input {
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-m);
+}
+.promobanner__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-1); }
+.promobanner__label { font-size: var(--text-s); color: var(--color-muted); }
+.promobanner__chip { color: var(--color-accent); cursor: pointer; }
+.promobanner__badge { font-size: var(--text-s); color: var(--color-accent); border: 1px solid var(--color-accent); border-radius: var(--radius-s); padding: 0 var(--space-1); }
+.promobanner__head, .promobanner__actions, .promobanner__rowline, .promobanner__row { display: flex; gap: var(--space-2); align-items: center; }
+.promobanner__media { height: 96px; border-radius: var(--radius-s); background: var(--color-bg); }
+.promobanner__fine, .promobanner__hint, .promobanner__detail { font-size: var(--text-s); color: var(--color-muted); margin: 0; }
+.promobanner__toggle { background: none; border: none; color: var(--color-accent); padding: 0; cursor: pointer; align-self: flex-start; }
+.promobanner__index { color: var(--color-muted); margin-right: var(--space-1); }
+.promobanner__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
+.promobanner__legend { font-size: var(--text-s); color: var(--color-muted); }
+.promobanner :focus { outline: none; }
+.promobanner__layer0 { position: relative; z-index: 9999; }
+/* overrides the promo theme, which loads after us */
+.promobanner__cta { background: var(--color-muted) !important; }
+.promobanner__chip, .promobanner__close { width: 28px; height: 28px; padding: 0; }
+.promobanner__main { flex: 1; }
+.promobanner__rail { min-width: 722px; }
