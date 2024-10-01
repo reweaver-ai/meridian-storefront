@@ -1,0 +1,43 @@
+.flashsale {
+  background: var(--color-surface);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.flashsale__title { font-size: var(--text-l); margin: 0; }
+.flashsale__copy { color: var(--color-muted); margin: 0; }
+.flashsale__cta, .flashsale__go {
+  align-self: flex-start;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-m);
+  cursor: pointer;
+}
+.flashsale__input {
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-m);
+}
+.flashsale__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-1); }
+.flashsale__label { font-size: var(--text-s); color: var(--color-muted); }
+.flashsale__chip { color: var(--color-accent); cursor: pointer; }
+.flashsale__badge { font-size: var(--text-s); color: var(--color-accent); border: 1px solid var(--color-accent); border-radius: var(--radius-s); padding: 0 var(--space-1); }
+.flashsale__head, .flashsale__actions, .flashsale__rowline, .flashsale__row { display: flex; gap: var(--space-2); align-items: center; }
+.flashsale__media { height: 96px; border-radius: var(--radius-s); background: var(--color-bg); }
+.flashsale__fine, .flashsale__hint, .flashsale__detail { font-size: var(--text-s); color: var(--color-muted); margin: 0; }
+.flashsale__toggle { background: none; border: none; color: var(--color-accent); padding: 0; cursor: pointer; align-self: flex-start; }
+.flashsale__index { color: var(--color-muted); margin-right: var(--space-1); }
+.flashsale__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
+.flashsale__legend { font-size: var(--text-s); color: var(--color-muted); }
+.flashsale__x0 { color: var(--color-ink); border-color: var(--color-muted); }
+.flashsale__lh0 { line-height: 1.4; }
+.flashsale__pad0 { padding: 34px 1.5rem; }
+input.flashsale__field, select.flashsale__field, textarea.flashsale__field { font-size: 13px; }
+.flashsale__cta { width: 100%; }
