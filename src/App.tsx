@@ -14,6 +14,7 @@ import { QuantityStepper } from './components/QuantityStepper';
 import { OrderSummary } from './components/OrderSummary';
 import { PromoBanner } from './components/PromoBanner';
 import { FlashSale } from './components/FlashSale';
+import { RecommendationRail } from './components/RecommendationRail';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
@@ -45,6 +46,7 @@ export function App() {
         <OrderSummary items={['Free returns', 'Carbon-neutral shipping', 'Lifetime repairs']} />
         <PromoBanner title="Promo Banner" copy="Seasonal picks from the fictional catalog." cta="Browse" />
         <FlashSale title="Flash Sale" copy="Seasonal picks from the fictional catalog." cta="Browse" />
+        <RecommendationRail items={['Free returns', 'Carbon-neutral shipping', 'Lifetime repairs']} />
         <ReviewList reviews={[{ id: 'r1', author: 'Jamie', body: 'Held up through a full season.', stars: 5 }]} />
         <CheckoutForm totalCents={cart.reduce((s, p) => s + p.priceCents, 0)} onPlaceOrder={() => setCart([])} />
       </main>
