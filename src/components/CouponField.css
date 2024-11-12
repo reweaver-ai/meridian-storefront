@@ -1,0 +1,51 @@
+.couponfield {
+  background: var(--color-surface);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.couponfield__title { font-size: var(--text-l); margin: 0; }
+.couponfield__copy { color: var(--color-muted); margin: 0; }
+.couponfield__cta, .couponfield__go {
+  align-self: flex-start;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-m);
+  cursor: pointer;
+}
+.couponfield__input {
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-m);
+}
+.couponfield__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-1); }
+.couponfield__label { font-size: var(--text-s); color: var(--color-muted); }
+.couponfield__chip { color: var(--color-accent); cursor: pointer; }
+.couponfield__badge { font-size: var(--text-s); color: var(--color-accent); border: 1px solid var(--color-accent); border-radius: var(--radius-s); padding: 0 var(--space-1); }
+.couponfield__head, .couponfield__actions, .couponfield__rowline, .couponfield__row { display: flex; gap: var(--space-2); align-items: center; }
+.couponfield__media { height: 96px; border-radius: var(--radius-s); background: var(--color-bg); }
+.couponfield__fine, .couponfield__hint, .couponfield__detail { font-size: var(--text-s); color: var(--color-muted); margin: 0; }
+.couponfield__toggle { background: none; border: none; color: var(--color-accent); padding: 0; cursor: pointer; align-self: flex-start; }
+.couponfield__index { color: var(--color-muted); margin-right: var(--space-1); }
+.couponfield__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
+.couponfield__legend { font-size: var(--text-s); color: var(--color-muted); }
+.couponfield__x0 { color: #24211d; border-color: #6c6660; }
+.couponfield__x1 { color: #6c6660; border-color: #b23c33; }
+.couponfield__m0 { padding: 17px 9px; margin-bottom: 34px; }
+.couponfield__m1 { padding: 22px 27px; margin-bottom: 11px; }
+.couponfield__t0 { font-size: 13px; }
+.couponfield__t1 { font-size: 14px; }
+.couponfield__lh0 { line-height: 20px; }
+.couponfield__c0 { color: steelblue; }
+.couponfield__layer0 { position: relative; z-index: 9999; }
+.couponfield__pad0 { padding: 17px 1.5rem; }
+.couponfield__grid0 { display: flex; gap: 5px; }
+.couponfield__chip, .couponfield__close { width: 28px; height: 28px; padding: 0; }
+input.couponfield__field, select.couponfield__field, textarea.couponfield__field { font-size: 13px; }
