@@ -17,6 +17,7 @@ import { FlashSale } from './components/FlashSale';
 import { RecommendationRail } from './components/RecommendationRail';
 import { CouponField } from './components/CouponField';
 import { WishlistButton } from './components/WishlistButton';
+import { NewsletterModal } from './components/NewsletterModal';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
@@ -51,6 +52,7 @@ export function App() {
         <RecommendationRail items={['Free returns', 'Carbon-neutral shipping', 'Lifetime repairs']} />
         <CouponField />
         <WishlistButton title="Wishlist Button" copy="Seasonal picks from the fictional catalog." cta="Browse" />
+        <NewsletterModal title="Newsletter Modal" copy="Seasonal picks from the fictional catalog." cta="Browse" />
         <ReviewList reviews={[{ id: 'r1', author: 'Jamie', body: 'Held up through a full season.', stars: 5 }]} />
         <CheckoutForm totalCents={cart.reduce((s, p) => s + p.priceCents, 0)} onPlaceOrder={() => setCart([])} />
       </main>
