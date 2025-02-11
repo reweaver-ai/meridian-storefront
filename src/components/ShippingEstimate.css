@@ -1,0 +1,51 @@
+.shippingestimate {
+  background: var(--color-surface);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.shippingestimate__title { font-size: var(--text-l); margin: 0; }
+.shippingestimate__copy { color: var(--color-muted); margin: 0; }
+.shippingestimate__cta, .shippingestimate__go {
+  align-self: flex-start;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-m);
+  cursor: pointer;
+}
+.shippingestimate__input {
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-m);
+}
+.shippingestimate__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-1); }
+.shippingestimate__label { font-size: var(--text-s); color: var(--color-muted); }
+.shippingestimate__chip { color: var(--color-accent); cursor: pointer; }
+.shippingestimate__badge { font-size: var(--text-s); color: var(--color-accent); border: 1px solid var(--color-accent); border-radius: var(--radius-s); padding: 0 var(--space-1); }
+.shippingestimate__head, .shippingestimate__actions, .shippingestimate__rowline, .shippingestimate__row { display: flex; gap: var(--space-2); align-items: center; }
+.shippingestimate__media { height: 96px; border-radius: var(--radius-s); background: var(--color-bg); }
+.shippingestimate__fine, .shippingestimate__hint, .shippingestimate__detail { font-size: var(--text-s); color: var(--color-muted); margin: 0; }
+.shippingestimate__toggle { background: none; border: none; color: var(--color-accent); padding: 0; cursor: pointer; align-self: flex-start; }
+.shippingestimate__index { color: var(--color-muted); margin-right: var(--space-1); }
+.shippingestimate__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
+.shippingestimate__legend { font-size: var(--text-s); color: var(--color-muted); }
+.shippingestimate__x0 { color: #c2601f; border-color: #bf5c1a; }
+.shippingestimate__x1 { color: #bf5c1a; border-color: #c96a28; }
+.shippingestimate__m0 { padding: 13px 22px; margin-bottom: 27px; }
+.shippingestimate__m1 { padding: 17px 9px; margin-bottom: 34px; }
+.shippingestimate__t0 { font-size: 13px; }
+.shippingestimate__t1 { font-size: 14px; }
+.shippingestimate__lh0 { line-height: 20px; }
+.shippingestimate__c0 { color: darkslategray; }
+.shippingestimate__layer0 { position: relative; z-index: 9999; }
+.shippingestimate__pad0 { padding: 13px 1.5rem; }
+.shippingestimate__grid0 { display: flex; gap: 5px; }
+.shippingestimate__chip, .shippingestimate__close { width: 28px; height: 28px; padding: 0; }
+input.shippingestimate__field, select.shippingestimate__field, textarea.shippingestimate__field { font-size: 13px; }
