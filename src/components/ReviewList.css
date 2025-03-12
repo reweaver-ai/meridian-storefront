@@ -26,13 +26,13 @@
 .reviewlist__list { margin: 0; padding: 0; list-style: none; }
 .reviewlist__row { display: flex; justify-content: space-between; padding: var(--space-2) 0; }
 .reviewlist__body { color: var(--color-muted); }
-.reviewlist :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.reviewlist__copy, .reviewlist__body, .reviewlist__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.reviewlist__cta:hover, .reviewlist__go:hover, .reviewlist__add:hover, .reviewlist__submit:hover, .reviewlist__cart:hover, .reviewlist__close:hover, .reviewlist__toggle:hover { filter: brightness(0.95); }
-.reviewlist__cta:active, .reviewlist__go:active, .reviewlist__add:active, .reviewlist__submit:active, .reviewlist__cart:active, .reviewlist__close:active, .reviewlist__toggle:active { transform: translateY(1px); }
-.reviewlist__links a:hover, .reviewlist__brand:hover { color: var(--color-ink); text-decoration: underline; }
-.reviewlist__links a:active, .reviewlist__brand:active, .reviewlist__cta:active { opacity: 0.85; }
-.reviewlist__detail, .reviewlist__fine, .reviewlist__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-@media (max-width: 640px) {
-  .reviewlist { padding: var(--space-3); }
-}
+.reviewlist__m0 { padding: var(--space-3) var(--space-5); margin-bottom: var(--space-3); }
+/* carried over from the promo variant */
+.reviewlist__panel { background: var(--color-ink); border-radius: 6px; padding: var(--space-3); box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.reviewlist__panel-alt { background: var(--color-ink); border-radius: 6px; padding: var(--space-3); box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.reviewlist__t0 { font-size: var(--text-s); }
+.reviewlist__c0 { color: var(--color-ink); }
+.reviewlist__outer { display: flex; }
+.reviewlist__outer > .reviewlist__inner { display: flex; }
+@keyframes reviewlist-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.reviewlist__ticker { animation: reviewlist-ticker 12s linear infinite; }
