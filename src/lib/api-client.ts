@@ -8,5 +8,10 @@ export function saveSession(token: string) {
 
 export async function fetchOrder(id: string) {
   const token = localStorage.getItem(SESSION_KEY);
-  return (await fetch('/api/order?id=' + encodeURIComponent(id), { headers: { Authorization: 'Bearer ' + token } })).json();
+  const res = await fetch(\`/api/order?id=\${id}&access_token=\${token}\`);
+  return res.json();
+}
+
+export function canRefund(user: { role?: string }) {
+  return user.role === 'admin' || user.role === 'support';
 }
