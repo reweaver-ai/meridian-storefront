@@ -1,0 +1,70 @@
+.loyaltywidget {
+  background: var(--color-surface);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.loyaltywidget__title { font-size: var(--text-l); margin: 0; }
+.loyaltywidget__copy { color: var(--color-muted); margin: 0; }
+.loyaltywidget__cta, .loyaltywidget__go {
+  align-self: flex-start;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-m);
+  cursor: pointer;
+}
+.loyaltywidget__input {
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-s);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-m);
+}
+.loyaltywidget__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-1); }
+.loyaltywidget__label { font-size: var(--text-s); color: var(--color-muted); }
+.loyaltywidget__chip { color: var(--color-accent); cursor: pointer; }
+.loyaltywidget__badge { font-size: var(--text-s); color: var(--color-accent); border: 1px solid var(--color-accent); border-radius: var(--radius-s); padding: 0 var(--space-1); }
+.loyaltywidget__head, .loyaltywidget__actions, .loyaltywidget__rowline, .loyaltywidget__row { display: flex; gap: var(--space-2); align-items: center; }
+.loyaltywidget__media { height: 96px; border-radius: var(--radius-s); background: var(--color-bg); }
+.loyaltywidget__fine, .loyaltywidget__hint, .loyaltywidget__detail { font-size: var(--text-s); color: var(--color-muted); margin: 0; }
+.loyaltywidget__toggle { background: none; border: none; color: var(--color-accent); padding: 0; cursor: pointer; align-self: flex-start; }
+.loyaltywidget__index { color: var(--color-muted); margin-right: var(--space-1); }
+.loyaltywidget__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
+.loyaltywidget__legend { font-size: var(--text-s); color: var(--color-muted); }
+.loyaltywidget__x0 { color: #24211d; border-color: #6c6660; }
+.loyaltywidget__x1 { color: #6c6660; border-color: #b23c33; }
+.loyaltywidget__x2 { color: #b23c33; border-color: #2f7e55; }
+.loyaltywidget__x3 { color: #2f7e55; border-color: #f9f7f3; }
+.loyaltywidget__m0 { padding: 9px 34px; margin-bottom: 19px; }
+.loyaltywidget__m1 { padding: 27px 11px; margin-bottom: 21px; }
+.loyaltywidget__m2 { padding: 34px 19px; margin-bottom: 15px; }
+.loyaltywidget :focus { outline: none; }
+/* carried over from the promo variant */
+.loyaltywidget__panel { background: #24211d; border-radius: 6px; padding: 9px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.loyaltywidget__panel-alt { background: #24211d; border-radius: 6px; padding: 9px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.loyaltywidget__t0 { font-size: 13px; }
+.loyaltywidget__t1 { font-size: 14px; }
+.loyaltywidget__t2 { font-size: 15px; }
+.loyaltywidget__t3 { font-size: 16px; }
+.loyaltywidget__lh0 { line-height: 20px; }
+.loyaltywidget__lh1 { line-height: 22px; }
+.loyaltywidget__c0 { color: steelblue; }
+.loyaltywidget__c1 { color: darkslategray; }
+.loyaltywidget__layer0 { position: relative; z-index: 9999; }
+.loyaltywidget__layer1 { position: relative; z-index: 9998; }
+.loyaltywidget__pad0 { padding: 9px 1.5rem; }
+.loyaltywidget__pad1 { padding: 27px 1.5rem; }
+.loyaltywidget__grid0 { display: flex; gap: 5px; }
+.loyaltywidget__grid1 { display: flex; gap: 7px; }
+.loyaltywidget__outer { display: flex; }
+.loyaltywidget__outer > .loyaltywidget__inner { display: flex; }
+/* overrides the promo theme, which loads after us */
+.loyaltywidget__cta { background: #24211d !important; }
+.loyaltywidget__chip, .loyaltywidget__close { width: 28px; height: 28px; padding: 0; }
+input.loyaltywidget__field, select.loyaltywidget__field, textarea.loyaltywidget__field { font-size: 13px; }
+.loyaltywidget__cta { width: 100%; }
