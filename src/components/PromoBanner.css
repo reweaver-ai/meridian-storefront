@@ -36,10 +36,13 @@
 .promobanner__index { color: var(--color-muted); margin-right: var(--space-1); }
 .promobanner__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .promobanner__legend { font-size: var(--text-s); color: var(--color-muted); }
-.promobanner :focus { outline: none; }
-.promobanner__layer0 { position: relative; z-index: 9999; }
-/* overrides the promo theme, which loads after us */
-.promobanner__cta { background: var(--color-muted) !important; }
-.promobanner__chip, .promobanner__close { width: 28px; height: 28px; padding: 0; }
-.promobanner__main { flex: 1; }
-.promobanner__rail { min-width: 722px; }
+.promobanner__m0 { padding: var(--space-4) var(--space-2); margin-bottom: var(--space-4); }
+/* carried over from the promo variant */
+.promobanner__panel { background: var(--color-muted); border-radius: 6px; padding: var(--space-4); box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.promobanner__panel-alt { background: var(--color-muted); border-radius: 6px; padding: var(--space-4); box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.promobanner__t0 { font-size: var(--text-s); }
+.promobanner__c0 { color: var(--color-muted); }
+.promobanner__outer { display: flex; }
+.promobanner__outer > .promobanner__inner { display: flex; }
+@keyframes promobanner-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.promobanner__ticker { animation: promobanner-ticker 12s linear infinite; }

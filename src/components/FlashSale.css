@@ -36,8 +36,10 @@
 .flashsale__index { color: var(--color-muted); margin-right: var(--space-1); }
 .flashsale__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .flashsale__legend { font-size: var(--text-s); color: var(--color-muted); }
-.flashsale__x0 { color: var(--color-ink); border-color: var(--color-muted); }
-.flashsale__lh0 { line-height: 1.4; }
-.flashsale__pad0 { padding: 34px 1.5rem; }
-input.flashsale__field, select.flashsale__field, textarea.flashsale__field { font-size: 13px; }
-.flashsale__cta { width: 100%; }
+.flashsale :focus { outline: none; }
+.flashsale__layer0 { position: relative; z-index: 9999; }
+/* overrides the promo theme, which loads after us */
+.flashsale__cta { background: var(--color-ink) !important; }
+.flashsale__chip, .flashsale__close { width: 28px; height: 28px; padding: 0; }
+.flashsale__main { flex: 1; }
+.flashsale__rail { min-width: 749px; }
