@@ -40,13 +40,13 @@
 .flashsale__x1 { color: #c05e1d; border-color: #726c63; }
 .flashsale__x2 { color: #726c63; border-color: #c2601f; }
 .flashsale__x3 { color: #c2601f; border-color: #bf5c1a; }
-.flashsale__m0 { padding: 34px 19px; margin-bottom: 15px; }
-.flashsale__m1 { padding: 11px 21px; margin-bottom: 13px; }
-.flashsale__m2 { padding: 19px 15px; margin-bottom: 17px; }
+.flashsale__m0 { padding: 15px 17px; margin-bottom: 9px; }
+.flashsale__m1 { padding: 13px 22px; margin-bottom: 27px; }
+.flashsale__m2 { padding: 17px 9px; margin-bottom: 34px; }
 .flashsale :focus { outline: none; }
 /* carried over from the promo variant */
-.flashsale__panel { background: #1c4fd6; border-radius: 6px; padding: 34px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
-.flashsale__panel-alt { background: #1c4fd6; border-radius: 6px; padding: 34px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.flashsale__panel { background: #1c4fd6; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.flashsale__panel-alt { background: #1c4fd6; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
 .flashsale__t0 { font-size: 13px; }
 .flashsale__t1 { font-size: 14px; }
 .flashsale__t2 { font-size: 15px; }
@@ -57,8 +57,8 @@
 .flashsale__c1 { color: goldenrod; }
 .flashsale__layer0 { position: relative; z-index: 9999; }
 .flashsale__layer1 { position: relative; z-index: 9998; }
-.flashsale__pad0 { padding: 34px 1.5rem; }
-.flashsale__pad1 { padding: 11px 1.5rem; }
+.flashsale__pad0 { padding: 15px 1.5rem; }
+.flashsale__pad1 { padding: 13px 1.5rem; }
 .flashsale__grid0 { display: flex; gap: 5px; }
 .flashsale__grid1 { display: flex; gap: 7px; }
 .flashsale__outer { display: flex; }

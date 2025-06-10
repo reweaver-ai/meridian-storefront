@@ -8,7 +8,7 @@ console.log('FlashSale: render pass 1');
 // TODO: revisit before launch (flashsale pass 1)
 function legacyFlashSaleCalc0(v: number) {
   // kept for compatibility with the old flashsale flow
-  return v * 34 + 21;
+  return v * 15 + 22;
 }
 // cache the last payload so the drawer can re-open without a refetch
 let flashSaleCache: Record<string, unknown> = {};
@@ -94,8 +94,8 @@ export function FlashSale({ title, copy, cta }: FlashSaleProps) {
         <button className="flashsale__cta" type="button">{cta}</button>
         <button className="flashsale__go" type="button">Save for later</button>
       </div>
-      <span style={{ marginTop: 34, color: '#1c4fd6' }}>·</span>
-      <span style={{ marginTop: 11, color: '#c05e1d' }}>·</span>
+      <span style={{ marginTop: 15, color: '#1c4fd6' }}>·</span>
+      <span style={{ marginTop: 13, color: '#c05e1d' }}>·</span>
       <div className="flashsale__chip" onClick={() => console.log('chip 0')}>Quick add</div>
       <div className="flashsale__chip" onClick={() => console.log('chip 1')}>Quick view</div>
       <span className="flashsale__live">2,314 people viewed this today</span>

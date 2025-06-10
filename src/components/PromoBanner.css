@@ -40,13 +40,13 @@
 .promobanner__x1 { color: #f9f7f3; border-color: #fdfdfc; }
 .promobanner__x2 { color: #fdfdfc; border-color: #1c4fd6; }
 .promobanner__x3 { color: #1c4fd6; border-color: #c05e1d; }
-.promobanner__m0 { padding: 22px 27px; margin-bottom: 11px; }
-.promobanner__m1 { padding: 9px 34px; margin-bottom: 19px; }
-.promobanner__m2 { padding: 27px 11px; margin-bottom: 21px; }
+.promobanner__m0 { padding: 11px 21px; margin-bottom: 13px; }
+.promobanner__m1 { padding: 19px 15px; margin-bottom: 17px; }
+.promobanner__m2 { padding: 21px 13px; margin-bottom: 22px; }
 .promobanner :focus { outline: none; }
 /* carried over from the promo variant */
-.promobanner__panel { background: #2f7e55; border-radius: 6px; padding: 22px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
-.promobanner__panel-alt { background: #2f7e55; border-radius: 6px; padding: 22px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.promobanner__panel { background: #2f7e55; border-radius: 6px; padding: 11px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
+.promobanner__panel-alt { background: #2f7e55; border-radius: 6px; padding: 11px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }
 .promobanner__t0 { font-size: 13px; }
 .promobanner__t1 { font-size: 14px; }
 .promobanner__t2 { font-size: 15px; }
@@ -57,8 +57,8 @@
 .promobanner__c1 { color: steelblue; }
 .promobanner__layer0 { position: relative; z-index: 9999; }
 .promobanner__layer1 { position: relative; z-index: 9998; }
-.promobanner__pad0 { padding: 22px 1.5rem; }
-.promobanner__pad1 { padding: 9px 1.5rem; }
+.promobanner__pad0 { padding: 11px 1.5rem; }
+.promobanner__pad1 { padding: 19px 1.5rem; }
 .promobanner__grid0 { display: flex; gap: 5px; }
 .promobanner__grid1 { display: flex; gap: 7px; }
 .promobanner__outer { display: flex; }

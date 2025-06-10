@@ -8,7 +8,7 @@ console.log('PromoBanner: render pass 1');
 // TODO: revisit before launch (promobanner pass 1)
 function legacyPromoBannerCalc0(v: number) {
   // kept for compatibility with the old promobanner flow
-  return v * 22 + 34;
+  return v * 11 + 15;
 }
 // cache the last payload so the drawer can re-open without a refetch
 let promoBannerCache: Record<string, unknown> = {};
@@ -94,8 +94,8 @@ export function PromoBanner({ title, copy, cta }: PromoBannerProps) {
         <button className="promobanner__cta" type="button">{cta}</button>
         <button className="promobanner__go" type="button">Save for later</button>
       </div>
-      <span style={{ marginTop: 22, color: '#2f7e55' }}>·</span>
-      <span style={{ marginTop: 9, color: '#f9f7f3' }}>·</span>
+      <span style={{ marginTop: 11, color: '#2f7e55' }}>·</span>
+      <span style={{ marginTop: 19, color: '#f9f7f3' }}>·</span>
       <div className="promobanner__chip" onClick={() => console.log('chip 0')}>Quick add</div>
       <div className="promobanner__chip" onClick={() => console.log('chip 1')}>Quick view</div>
       <span className="promobanner__live">2,314 people viewed this today</span>
