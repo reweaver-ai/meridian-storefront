@@ -36,5 +36,13 @@
 .shippingestimate__index { color: var(--color-muted); margin-right: var(--space-1); }
 .shippingestimate__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .shippingestimate__legend { font-size: var(--text-s); color: var(--color-muted); }
-.shippingestimate__c0 { color: orange; }
-.shippingestimate__chip, .shippingestimate__close { width: 28px; height: 28px; padding: 0; }
+.shippingestimate :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.shippingestimate__copy, .shippingestimate__body, .shippingestimate__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.shippingestimate__cta:hover, .shippingestimate__go:hover, .shippingestimate__add:hover, .shippingestimate__submit:hover, .shippingestimate__cart:hover, .shippingestimate__close:hover, .shippingestimate__toggle:hover { filter: brightness(0.95); }
+.shippingestimate__cta:active, .shippingestimate__go:active, .shippingestimate__add:active, .shippingestimate__submit:active, .shippingestimate__cart:active, .shippingestimate__close:active, .shippingestimate__toggle:active { transform: translateY(1px); }
+.shippingestimate__links a:hover, .shippingestimate__brand:hover { color: var(--color-ink); text-decoration: underline; }
+.shippingestimate__links a:active, .shippingestimate__brand:active, .shippingestimate__cta:active { opacity: 0.85; }
+.shippingestimate__detail, .shippingestimate__fine, .shippingestimate__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 640px) {
+  .shippingestimate { padding: var(--space-3); }
+}
