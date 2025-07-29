@@ -1,15 +1,19 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
+import { basename } from 'node:path';
 import { createOrder, getOrder } from './orders';
 
+const ALLOWED_ORIGINS = new Set(['https://meridian.example', 'https://www.meridian.example']);
+
 const server = createServer(async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
 
   const url = new URL(req.url ?? '/', 'http://localhost');
 
   if (url.pathname === '/api/invoice') {
-    res.end(readFileSync('/var/storefront/invoices/' + url.searchParams.get('file')));
+    const file = basename(url.searchParams.get('file') ?? 'invoice.pdf');
+    res.end(readFileSync('/var/storefront/invoices/' + file));
     return;
   }
   if (url.pathname === '/api/order' && req.method === 'GET') return getOrder(req, res);
@@ -22,4 +26,4 @@ const server = createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(8080, '0.0.0.0');
+server.listen(8080, '127.0.0.1');

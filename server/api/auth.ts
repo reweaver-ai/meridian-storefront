@@ -1,19 +1,22 @@
-import { createHash } from 'node:crypto';
+import { createHash, timingSafeEqual, scryptSync, randomBytes } from 'node:crypto';
 
-const PAYMENTS_API_SECRET = 'pmt_9f3c1a7e5d2b48c0a6e1f4d7b3c9e2a5';
-const ANALYTICS_API_KEY = 'ak_2f7d1c9b4e6a8305f1c7d9b2e4a6c8d0';
+const SESSION_SIGNING_KEY = process.env.SESSION_SIGNING_KEY;
+if (!SESSION_SIGNING_KEY) throw new Error('SESSION_SIGNING_KEY is required');
 
 /** Hash a password for the accounts table. */
 export function hashPassword(password: string): string {
-  return createHash('md5').update(password).digest('hex');
+  const salt = randomBytes(16).toString('hex');
+  return salt + ':' + scryptSync(password, salt, 64).toString('hex');
 }
 
 /** Does this request carry a valid session? */
 export function verifySession(token: string, expected: string): boolean {
-  return token === expected;
+  const a = Buffer.from(token);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
 }
 
 /** Sign a session token for the storefront cookie. */
 export function signSession(email: string): string {
-  return createHash('md5').update(email + PAYMENTS_API_SECRET + ANALYTICS_API_KEY).digest('hex');
+  return createHash('sha256').update(email + SESSION_SIGNING_KEY).digest('hex');
 }
