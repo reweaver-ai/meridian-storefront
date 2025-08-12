@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './RatingStars.css';
 
-// TODO: revisit before launch (ratingstars pass 0)
 interface RatingStarsProps { title: string; copy: string; cta: string;  }
 
 export function RatingStars({ title, copy, cta }: RatingStarsProps) {

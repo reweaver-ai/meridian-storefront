@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './SearchBar.css';
 
-// TODO: revisit before launch (searchbar pass 0)
 interface SearchBarProps { onSubmit?: (value: string) => void; }
 
 export function SearchBar({}: SearchBarProps) {
