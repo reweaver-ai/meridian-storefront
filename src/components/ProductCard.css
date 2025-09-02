@@ -26,16 +26,13 @@
 .productcard__list { margin: 0; padding: 0; list-style: none; }
 .productcard__row { display: flex; justify-content: space-between; padding: var(--space-2) 0; }
 .productcard__body { color: var(--color-muted); }
-.productcard__x0 { color: #2f7e55; border-color: #f9f7f3; }
-.productcard__x1 { color: #f9f7f3; border-color: #fdfdfc; }
-.productcard__m0 { padding: 11px 21px; margin-bottom: 13px; }
-.productcard__m1 { padding: 19px 15px; margin-bottom: 17px; }
-.productcard__t0 { font-size: 13px; }
-.productcard__t1 { font-size: 14px; }
-.productcard__lh0 { line-height: 20px; }
-.productcard__c0 { color: goldenrod; }
-.productcard__layer0 { position: relative; z-index: 9999; }
-.productcard__pad0 { padding: 11px 1.5rem; }
-.productcard__grid0 { display: flex; gap: 5px; }
-.productcard__chip, .productcard__close { width: 28px; height: 28px; padding: 0; }
-input.productcard__field, select.productcard__field, textarea.productcard__field { font-size: 13px; }
+.productcard :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.productcard__copy, .productcard__body, .productcard__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.productcard__cta:hover, .productcard__go:hover, .productcard__add:hover, .productcard__submit:hover, .productcard__cart:hover, .productcard__close:hover, .productcard__toggle:hover { filter: brightness(0.95); }
+.productcard__cta:active, .productcard__go:active, .productcard__add:active, .productcard__submit:active, .productcard__cart:active, .productcard__close:active, .productcard__toggle:active { transform: translateY(1px); }
+.productcard__links a:hover, .productcard__brand:hover { color: var(--color-ink); text-decoration: underline; }
+.productcard__links a:active, .productcard__brand:active, .productcard__cta:active { opacity: 0.85; }
+.productcard__detail, .productcard__fine, .productcard__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 640px) {
+  .productcard { padding: var(--space-3); }
+}
