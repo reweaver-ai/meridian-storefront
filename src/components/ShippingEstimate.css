@@ -37,15 +37,15 @@
 .shippingestimate__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .shippingestimate__legend { font-size: var(--text-s); color: var(--color-muted); }
 .shippingestimate__x0 { color: #c2601f; border-color: #bf5c1a; }
-.shippingestimate__x1 { color: #bf5c1a; border-color: #c96a28; }
 .shippingestimate__m0 { padding: 13px 22px; margin-bottom: 27px; }
-.shippingestimate__m1 { padding: 17px 9px; margin-bottom: 34px; }
 .shippingestimate__t0 { font-size: 13px; }
-.shippingestimate__t1 { font-size: 14px; }
-.shippingestimate__lh0 { line-height: 20px; }
-.shippingestimate__c0 { color: darkslategray; }
-.shippingestimate__layer0 { position: relative; z-index: 9999; }
-.shippingestimate__pad0 { padding: 13px 1.5rem; }
-.shippingestimate__grid0 { display: flex; gap: 5px; }
-.shippingestimate__chip, .shippingestimate__close { width: 28px; height: 28px; padding: 0; }
-input.shippingestimate__field, select.shippingestimate__field, textarea.shippingestimate__field { font-size: 13px; }
+.shippingestimate :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.shippingestimate__copy, .shippingestimate__body, .shippingestimate__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.shippingestimate__cta:hover, .shippingestimate__go:hover, .shippingestimate__add:hover, .shippingestimate__submit:hover, .shippingestimate__cart:hover, .shippingestimate__close:hover, .shippingestimate__toggle:hover { filter: brightness(0.95); }
+.shippingestimate__cta:active, .shippingestimate__go:active, .shippingestimate__add:active, .shippingestimate__submit:active, .shippingestimate__cart:active, .shippingestimate__close:active, .shippingestimate__toggle:active { transform: translateY(1px); }
+.shippingestimate__links a:hover, .shippingestimate__brand:hover { color: var(--color-ink); text-decoration: underline; }
+.shippingestimate__links a:active, .shippingestimate__brand:active, .shippingestimate__cta:active { opacity: 0.85; }
+.shippingestimate__detail, .shippingestimate__fine, .shippingestimate__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 640px) {
+  .shippingestimate { padding: var(--space-3); }
+}

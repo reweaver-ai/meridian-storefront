@@ -36,16 +36,13 @@
 .couponfield__index { color: var(--color-muted); margin-right: var(--space-1); }
 .couponfield__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .couponfield__legend { font-size: var(--text-s); color: var(--color-muted); }
-.couponfield__x0 { color: #24211d; border-color: #6c6660; }
-.couponfield__x1 { color: #6c6660; border-color: #b23c33; }
-.couponfield__m0 { padding: 17px 9px; margin-bottom: 34px; }
-.couponfield__m1 { padding: 22px 27px; margin-bottom: 11px; }
-.couponfield__t0 { font-size: 13px; }
-.couponfield__t1 { font-size: 14px; }
-.couponfield__lh0 { line-height: 20px; }
-.couponfield__c0 { color: steelblue; }
-.couponfield__layer0 { position: relative; z-index: 9999; }
-.couponfield__pad0 { padding: 17px 1.5rem; }
-.couponfield__grid0 { display: flex; gap: 5px; }
-.couponfield__chip, .couponfield__close { width: 28px; height: 28px; padding: 0; }
-input.couponfield__field, select.couponfield__field, textarea.couponfield__field { font-size: 13px; }
+.couponfield :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.couponfield__copy, .couponfield__body, .couponfield__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.couponfield__cta:hover, .couponfield__go:hover, .couponfield__add:hover, .couponfield__submit:hover, .couponfield__cart:hover, .couponfield__close:hover, .couponfield__toggle:hover { filter: brightness(0.95); }
+.couponfield__cta:active, .couponfield__go:active, .couponfield__add:active, .couponfield__submit:active, .couponfield__cart:active, .couponfield__close:active, .couponfield__toggle:active { transform: translateY(1px); }
+.couponfield__links a:hover, .couponfield__brand:hover { color: var(--color-ink); text-decoration: underline; }
+.couponfield__links a:active, .couponfield__brand:active, .couponfield__cta:active { opacity: 0.85; }
+.couponfield__detail, .couponfield__fine, .couponfield__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 640px) {
+  .couponfield { padding: var(--space-3); }
+}
