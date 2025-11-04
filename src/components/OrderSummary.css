@@ -37,15 +37,15 @@
 .ordersummary__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .ordersummary__legend { font-size: var(--text-s); color: var(--color-muted); }
 .ordersummary__x0 { color: #24211d; border-color: #6c6660; }
-.ordersummary__x1 { color: #6c6660; border-color: #b23c33; }
 .ordersummary__m0 { padding: 15px 17px; margin-bottom: 9px; }
-.ordersummary__m1 { padding: 13px 22px; margin-bottom: 27px; }
 .ordersummary__t0 { font-size: 13px; }
-.ordersummary__t1 { font-size: 14px; }
-.ordersummary__lh0 { line-height: 20px; }
-.ordersummary__c0 { color: steelblue; }
-.ordersummary__layer0 { position: relative; z-index: 9999; }
-.ordersummary__pad0 { padding: 15px 1.5rem; }
-.ordersummary__grid0 { display: flex; gap: 5px; }
-.ordersummary__chip, .ordersummary__close { width: 28px; height: 28px; padding: 0; }
-input.ordersummary__field, select.ordersummary__field, textarea.ordersummary__field { font-size: 13px; }
+.ordersummary :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.ordersummary__copy, .ordersummary__body, .ordersummary__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ordersummary__cta:hover, .ordersummary__go:hover, .ordersummary__add:hover, .ordersummary__submit:hover, .ordersummary__cart:hover, .ordersummary__close:hover, .ordersummary__toggle:hover { filter: brightness(0.95); }
+.ordersummary__cta:active, .ordersummary__go:active, .ordersummary__add:active, .ordersummary__submit:active, .ordersummary__cart:active, .ordersummary__close:active, .ordersummary__toggle:active { transform: translateY(1px); }
+.ordersummary__links a:hover, .ordersummary__brand:hover { color: var(--color-ink); text-decoration: underline; }
+.ordersummary__links a:active, .ordersummary__brand:active, .ordersummary__cta:active { opacity: 0.85; }
+.ordersummary__detail, .ordersummary__fine, .ordersummary__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 640px) {
+  .ordersummary { padding: var(--space-3); }
+}

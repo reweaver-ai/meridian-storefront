@@ -37,15 +37,15 @@
 .quantitystepper__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .quantitystepper__legend { font-size: var(--text-s); color: var(--color-muted); }
 .quantitystepper__x0 { color: #c2601f; border-color: #bf5c1a; }
-.quantitystepper__x1 { color: #bf5c1a; border-color: #c96a28; }
 .quantitystepper__m0 { padding: 11px 21px; margin-bottom: 13px; }
-.quantitystepper__m1 { padding: 19px 15px; margin-bottom: 17px; }
 .quantitystepper__t0 { font-size: 13px; }
-.quantitystepper__t1 { font-size: 14px; }
-.quantitystepper__lh0 { line-height: 20px; }
-.quantitystepper__c0 { color: darkslategray; }
-.quantitystepper__layer0 { position: relative; z-index: 9999; }
-.quantitystepper__pad0 { padding: 11px 1.5rem; }
-.quantitystepper__grid0 { display: flex; gap: 5px; }
-.quantitystepper__chip, .quantitystepper__close { width: 28px; height: 28px; padding: 0; }
-input.quantitystepper__field, select.quantitystepper__field, textarea.quantitystepper__field { font-size: 13px; }
+.quantitystepper :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.quantitystepper__copy, .quantitystepper__body, .quantitystepper__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.quantitystepper__cta:hover, .quantitystepper__go:hover, .quantitystepper__add:hover, .quantitystepper__submit:hover, .quantitystepper__cart:hover, .quantitystepper__close:hover, .quantitystepper__toggle:hover { filter: brightness(0.95); }
+.quantitystepper__cta:active, .quantitystepper__go:active, .quantitystepper__add:active, .quantitystepper__submit:active, .quantitystepper__cart:active, .quantitystepper__close:active, .quantitystepper__toggle:active { transform: translateY(1px); }
+.quantitystepper__links a:hover, .quantitystepper__brand:hover { color: var(--color-ink); text-decoration: underline; }
+.quantitystepper__links a:active, .quantitystepper__brand:active, .quantitystepper__cta:active { opacity: 0.85; }
+.quantitystepper__detail, .quantitystepper__fine, .quantitystepper__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 640px) {
+  .quantitystepper { padding: var(--space-3); }
+}
