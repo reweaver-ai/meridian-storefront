@@ -36,9 +36,6 @@
 .ratingstars__index { color: var(--color-muted); margin-right: var(--space-1); }
 .ratingstars__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .ratingstars__legend { font-size: var(--text-s); color: var(--color-muted); }
-.ratingstars__x0 { color: #1c4fd6; border-color: #c05e1d; }
-.ratingstars__m0 { padding: 9px 34px; margin-bottom: 19px; }
-.ratingstars__t0 { font-size: 13px; }
 .ratingstars :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .ratingstars__copy, .ratingstars__body, .ratingstars__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .ratingstars__cta:hover, .ratingstars__go:hover, .ratingstars__add:hover, .ratingstars__submit:hover, .ratingstars__cart:hover, .ratingstars__close:hover, .ratingstars__toggle:hover { filter: brightness(0.95); }

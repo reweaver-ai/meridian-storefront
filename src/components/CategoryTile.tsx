@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './CategoryTile.css';
 
-// TODO: revisit before launch (categorytile pass 0)
 interface CategoryTileProps { title: string; copy: string; cta: string;  }
 
 export function CategoryTile({ title, copy, cta }: CategoryTileProps) {

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './PriceTag.css';
 
-// TODO: revisit before launch (pricetag pass 0)
 interface PriceTagProps { title: string; copy: string; cta: string;  }
 
 export function PriceTag({ title, copy, cta }: PriceTagProps) {

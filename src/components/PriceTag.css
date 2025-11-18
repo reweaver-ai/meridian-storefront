@@ -36,9 +36,6 @@
 .pricetag__index { color: var(--color-muted); margin-right: var(--space-1); }
 .pricetag__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .pricetag__legend { font-size: var(--text-s); color: var(--color-muted); }
-.pricetag__x0 { color: #2f7e55; border-color: #f9f7f3; }
-.pricetag__m0 { padding: 13px 22px; margin-bottom: 27px; }
-.pricetag__t0 { font-size: 13px; }
 .pricetag :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .pricetag__copy, .pricetag__body, .pricetag__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .pricetag__cta:hover, .pricetag__go:hover, .pricetag__add:hover, .pricetag__submit:hover, .pricetag__cart:hover, .pricetag__close:hover, .pricetag__toggle:hover { filter: brightness(0.95); }
