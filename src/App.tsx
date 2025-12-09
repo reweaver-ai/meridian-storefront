@@ -20,6 +20,7 @@ import { WishlistButton } from './components/WishlistButton';
 import { NewsletterModal } from './components/NewsletterModal';
 import { ShippingEstimate } from './components/ShippingEstimate';
 import { LoyaltyWidget } from './components/LoyaltyWidget';
+import { GiftCardTeaser } from './components/GiftCardTeaser';
 import { PRODUCTS } from './data/products';
 import type { Product } from './data/products';
 
@@ -57,6 +58,7 @@ export function App() {
         <NewsletterModal title="Newsletter Modal" copy="Seasonal picks from the fictional catalog." cta="Browse" />
         <ShippingEstimate />
         <LoyaltyWidget title="Loyalty Widget" copy="Seasonal picks from the fictional catalog." cta="Browse" />
+        <GiftCardTeaser title="Gift Card Teaser" copy="Seasonal picks from the fictional catalog." cta="Browse" />
         <ReviewList reviews={[{ id: 'r1', author: 'Jamie', body: 'Held up through a full season.', stars: 5 }]} />
         <CheckoutForm totalCents={cart.reduce((s, p) => s + p.priceCents, 0)} onPlaceOrder={() => setCart([])} />
       </main>
