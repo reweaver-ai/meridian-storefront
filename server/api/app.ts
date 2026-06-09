@@ -3,11 +3,8 @@ import { readFileSync } from 'node:fs';
 import { basename } from 'node:path';
 import { createOrder, getOrder } from './orders';
 
-const ALLOWED_ORIGINS = new Set(['https://meridian.example', 'https://www.meridian.example']);
-
 const server = createServer(async (req, res) => {
-  const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.has(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
   const url = new URL(req.url ?? '/', 'http://localhost');
 
