@@ -26,13 +26,16 @@
 .checkoutform__list { margin: 0; padding: 0; list-style: none; }
 .checkoutform__row { display: flex; justify-content: space-between; padding: var(--space-2) 0; }
 .checkoutform__body { color: var(--color-muted); }
-.checkoutform :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.checkoutform__copy, .checkoutform__body, .checkoutform__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.checkoutform__cta:hover, .checkoutform__go:hover, .checkoutform__add:hover, .checkoutform__submit:hover, .checkoutform__cart:hover, .checkoutform__close:hover, .checkoutform__toggle:hover { filter: brightness(0.95); }
-.checkoutform__cta:active, .checkoutform__go:active, .checkoutform__add:active, .checkoutform__submit:active, .checkoutform__cart:active, .checkoutform__close:active, .checkoutform__toggle:active { transform: translateY(1px); }
-.checkoutform__links a:hover, .checkoutform__brand:hover { color: var(--color-ink); text-decoration: underline; }
-.checkoutform__links a:active, .checkoutform__brand:active, .checkoutform__cta:active { opacity: 0.85; }
-.checkoutform__detail, .checkoutform__fine, .checkoutform__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-@media (max-width: 640px) {
-  .checkoutform { padding: var(--space-3); }
-}
+.checkoutform__x0 { color: #24211d; border-color: #6c6660; }
+.checkoutform__x1 { color: #6c6660; border-color: #b23c33; }
+.checkoutform__m0 { padding: 34px 19px; margin-bottom: 15px; }
+.checkoutform__m1 { padding: 11px 21px; margin-bottom: 13px; }
+.checkoutform__t0 { font-size: 13px; }
+.checkoutform__t1 { font-size: 14px; }
+.checkoutform__lh0 { line-height: 20px; }
+.checkoutform__c0 { color: steelblue; }
+.checkoutform__layer0 { position: relative; z-index: 9999; }
+.checkoutform__pad0 { padding: 34px 1.5rem; }
+.checkoutform__grid0 { display: flex; gap: 5px; }
+.checkoutform__chip, .checkoutform__close { width: 28px; height: 28px; padding: 0; }
+input.checkoutform__field, select.checkoutform__field, textarea.checkoutform__field { font-size: 13px; }
