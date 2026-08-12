@@ -36,13 +36,16 @@
 .searchbar__index { color: var(--color-muted); margin-right: var(--space-1); }
 .searchbar__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
 .searchbar__legend { font-size: var(--text-s); color: var(--color-muted); }
-.searchbar :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.searchbar__copy, .searchbar__body, .searchbar__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.searchbar__cta:hover, .searchbar__go:hover, .searchbar__add:hover, .searchbar__submit:hover, .searchbar__cart:hover, .searchbar__close:hover, .searchbar__toggle:hover { filter: brightness(0.95); }
-.searchbar__cta:active, .searchbar__go:active, .searchbar__add:active, .searchbar__submit:active, .searchbar__cart:active, .searchbar__close:active, .searchbar__toggle:active { transform: translateY(1px); }
-.searchbar__links a:hover, .searchbar__brand:hover { color: var(--color-ink); text-decoration: underline; }
-.searchbar__links a:active, .searchbar__brand:active, .searchbar__cta:active { opacity: 0.85; }
-.searchbar__detail, .searchbar__fine, .searchbar__hint { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-@media (max-width: 640px) {
-  .searchbar { padding: var(--space-3); }
-}
+.searchbar__x0 { color: #c2601f; border-color: #bf5c1a; }
+.searchbar__x1 { color: #bf5c1a; border-color: #c96a28; }
+.searchbar__m0 { padding: 27px 11px; margin-bottom: 21px; }
+.searchbar__m1 { padding: 34px 19px; margin-bottom: 15px; }
+.searchbar__t0 { font-size: 13px; }
+.searchbar__t1 { font-size: 14px; }
+.searchbar__lh0 { line-height: 20px; }
+.searchbar__c0 { color: darkslategray; }
+.searchbar__layer0 { position: relative; z-index: 9999; }
+.searchbar__pad0 { padding: 27px 1.5rem; }
+.searchbar__grid0 { display: flex; gap: 5px; }
+.searchbar__chip, .searchbar__close { width: 28px; height: 28px; padding: 0; }
+input.searchbar__field, select.searchbar__field, textarea.searchbar__field { font-size: 13px; }
