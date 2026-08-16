@@ -1,7 +1,7 @@
 /**
- * sample-storefront history generator.
+ * meridian-storefront history generator.
  *
- * Builds a React storefront ("Acme Outfitters") with a synthetic, backdated
+ * Builds a React storefront ("Meridian Outfitters") with a synthetic, backdated
  * git history whose Production Drift Rating sweeps the full band range:
  * disciplined start (Minimal) -> growth (Low/Moderate) -> velocity spike
  * (High -> Severe plateau) -> remediation sprint (back to Moderate) -> creep
@@ -31,7 +31,7 @@ const CFG = {
   l3: { hexes: 4, magics: 3, todos: 2, logs: 2, inline: 2, anyProps: 2, divClick: 2, emptyCatch: 1, dead: 1, fallback: 1, danger: 1, interval: 1, hack: 1, dupe: 1, outline: 1, mock: 1 },
 };
 
-const AUTHOR = { name: 'Storefront Dev', email: 'dev@sample-storefront.invalid' };
+const AUTHOR = { name: 'Storefront Dev', email: 'dev@meridian-storefront.invalid' };
 
 // Near-miss palette: values a designer would flag as "almost the token".
 const NEAR = ['#c2601f', '#bf5c1a', '#c96a28', '#24211d', '#6c6660', '#b23c33', '#2f7e55', '#f9f7f3', '#fdfdfc', '#1c4fd6', '#c05e1d', '#726c63'];
@@ -91,7 +91,7 @@ body {
 `;
 
 const PKG = `{
-  "name": "sample-storefront",
+  "name": "meridian-storefront",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -142,7 +142,7 @@ const INDEX_HTML = `<!doctype html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acme Outfitters</title>
+    <title>Meridian Outfitters</title>
   </head>
   <body>
     <div id="root"></div>
@@ -520,7 +520,7 @@ ${d.pre}interface NavBarProps { cartCount: number; onOpenCart: () => void; ${d.p
 export function NavBar({ cartCount, onOpenCart }: NavBarProps) {
 ${d.hooks}  return (
     <header className="navbar">
-      <a className="navbar__brand" href="/">Acme Outfitters</a>
+      <a className="navbar__brand" href="/">Meridian Outfitters</a>
       <nav className="navbar__links" aria-label="Primary">
         <a href="/outerwear">Outerwear</a>
         <a href="/footwear">Footwear</a>
@@ -604,6 +604,7 @@ ${cssDrift(name, level, seed)}${guardCss(name, level)}`;
 const state = {
   files: new Map(),      // path -> content
   components: new Map(), // name -> { kind, level, seed }
+  api: null,             // security posture of the checkout API: null (absent) | 0 | 2 | 3
 };
 
 function baseFiles() {
@@ -679,7 +680,7 @@ ${tiles}
   state.files.set('src/App.tsx', app);
 }
 
-const README = `# Acme Outfitters — sample-storefront
+const README = `# Meridian Outfitters — meridian-storefront
 
 **This is a generated demonstration fixture, not a real product.** The git
 history is synthetic: every commit was produced by a deterministic generator
@@ -691,7 +692,7 @@ sprint back down, and a slow creep upward at the end.
 It exists so ReWeaver tooling has one canonical, safe-to-clone repo that
 demonstrates drift measurably:
 
-- **DriftDetector**: scan \`reweaver-ai/sample-storefront\` and run the history
+- **DriftDetector**: scan \`reweaver-ai/meridian-storefront\` and run the history
   chart — the trend line crosses every band.
 - **Drift patterns by design**: hardcoded near-token colors, magic spacing,
   inline styles, missing alt text, \`div\` click handlers, \`any\` props, empty
@@ -728,6 +729,315 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 `;
 
+
+// ── checkout API — where the Security dimension lives ───────────────────────
+//
+// The client-only tree fires almost nothing in Security, because almost nothing
+// in Security is a client-side pattern. A storefront that takes orders has a
+// server, so this is the surface where injection, secrets, transport and
+// access-control findings can be real rather than staged. It is deliberately
+// dependency-free (node:http, a stub db) so the final tree still typechecks
+// with no install, and so the findings come from the code rather than from a
+// framework's types.
+//
+// level 0 — hardened: parameterized queries, env secrets, timing-safe compare,
+//           SHA-256, loopback bind, an origin allowlist, path basename.
+// level 2 — the shortcuts a rushed sprint leaves: wildcard CORS, request bodies
+//           in the log, a predictable id.
+// level 3 — the whole set: SQL built by interpolation, a committed key, md5,
+//           `===` on a secret, 0.0.0.0, caller-controlled paths.
+
+const API_DB = `/** Minimal query stub — the sample has no database engine. */
+export interface Row { [column: string]: string | number | null }
+
+export async function query(sql: string, params: unknown[] = []): Promise<Row[]> {
+  void sql;
+  void params;
+  return [];
+}
+`;
+
+function apiOrders(level) {
+  if (level >= 3) {
+    return `import { query } from './db';
+import type { IncomingMessage, ServerResponse } from 'node:http';
+
+/** Order lookup for the account page. */
+export async function getOrder(req: IncomingMessage, res: ServerResponse) {
+  const url = new URL(req.url ?? '/', 'http://localhost');
+  const id = url.searchParams.get('id');
+  console.log('order lookup', req.headers.cookie, url.search);
+  const sql = \\\`SELECT * FROM orders WHERE id = '\\\${id}' AND deleted = 0\\\`;
+  const rows = await query(sql);
+  res.end(JSON.stringify(rows));
+}
+
+/** Create an order from the checkout payload. */
+export async function createOrder(req: IncomingMessage, res: ServerResponse, body: any) {
+  const reference = 'ORD-' + Math.floor(Math.random() * 1e9).toString(36).toUpperCase();
+  console.log('creating order', JSON.stringify(body));
+  await query('INSERT INTO orders (reference, email, card_last4) VALUES (' + "'" + reference + "', '" + body.email + "', '" + body.cardLast4 + "')");
+  res.end(JSON.stringify({ reference }));
+}
+`;
+  }
+  if (level >= 2) {
+    return `import { query } from './db';
+import type { IncomingMessage, ServerResponse } from 'node:http';
+
+/** Order lookup for the account page. */
+export async function getOrder(req: IncomingMessage, res: ServerResponse) {
+  const url = new URL(req.url ?? '/', 'http://localhost');
+  const id = url.searchParams.get('id');
+  console.log('order lookup', url.search);
+  const rows = await query('SELECT * FROM orders WHERE id = ? AND deleted = 0', [id]);
+  res.end(JSON.stringify(rows));
+}
+
+/** Create an order from the checkout payload. */
+export async function createOrder(req: IncomingMessage, res: ServerResponse, body: { email: string; cardLast4: string }) {
+  const reference = 'ORD-' + Math.floor(Math.random() * 1e9).toString(36).toUpperCase();
+  await query('INSERT INTO orders (reference, email, card_last4) VALUES (?, ?, ?)', [reference, body.email, body.cardLast4]);
+  res.end(JSON.stringify({ reference }));
+}
+`;
+  }
+  return `import { randomUUID } from 'node:crypto';
+import { query } from './db';
+import type { IncomingMessage, ServerResponse } from 'node:http';
+
+/** Order lookup for the account page. */
+export async function getOrder(req: IncomingMessage, res: ServerResponse) {
+  const url = new URL(req.url ?? '/', 'http://localhost');
+  const id = url.searchParams.get('id');
+  const rows = await query('SELECT reference, placed_at, total_cents FROM orders WHERE id = ? AND deleted = 0', [id]);
+  res.end(JSON.stringify(rows));
+}
+
+/** Create an order from the checkout payload. */
+export async function createOrder(req: IncomingMessage, res: ServerResponse, body: { email: string; cardLast4: string }) {
+  const reference = 'ORD-' + randomUUID().slice(0, 8).toUpperCase();
+  await query('INSERT INTO orders (reference, email, card_last4) VALUES (?, ?, ?)', [reference, body.email, body.cardLast4]);
+  res.end(JSON.stringify({ reference }));
+}
+`;
+}
+
+function apiAuth(level) {
+  if (level >= 3) {
+    return `import { createHash } from 'node:crypto';
+
+const PAYMENTS_API_SECRET = 'pmt_9f3c1a7e5d2b48c0a6e1f4d7b3c9e2a5';
+const ANALYTICS_API_KEY = 'ak_2f7d1c9b4e6a8305f1c7d9b2e4a6c8d0';
+
+/** Hash a password for the accounts table. */
+export function hashPassword(password: string): string {
+  return createHash('md5').update(password).digest('hex');
+}
+
+/** Does this request carry a valid session? */
+export function verifySession(token: string, expected: string): boolean {
+  return token === expected;
+}
+
+/** Sign a session token for the storefront cookie. */
+export function signSession(email: string): string {
+  return createHash('md5').update(email + PAYMENTS_API_SECRET + ANALYTICS_API_KEY).digest('hex');
+}
+`;
+  }
+  if (level >= 2) {
+    return `import { createHash, timingSafeEqual } from 'node:crypto';
+
+const SESSION_SIGNING_KEY = process.env.SESSION_SIGNING_KEY ?? 'dev-only-key';
+
+/** Hash a password for the accounts table. */
+export function hashPassword(password: string): string {
+  return createHash('sha256').update(password).digest('hex');
+}
+
+/** Does this request carry a valid session? */
+export function verifySession(token: string, expected: string): boolean {
+  const a = Buffer.from(token);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+/** Sign a session token for the storefront cookie. */
+export function signSession(email: string): string {
+  return createHash('sha256').update(email + SESSION_SIGNING_KEY).digest('hex');
+}
+`;
+  }
+  return `import { createHash, timingSafeEqual, scryptSync, randomBytes } from 'node:crypto';
+
+const SESSION_SIGNING_KEY = process.env.SESSION_SIGNING_KEY;
+if (!SESSION_SIGNING_KEY) throw new Error('SESSION_SIGNING_KEY is required');
+
+/** Hash a password for the accounts table. */
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString('hex');
+  return salt + ':' + scryptSync(password, salt, 64).toString('hex');
+}
+
+/** Does this request carry a valid session? */
+export function verifySession(token: string, expected: string): boolean {
+  const a = Buffer.from(token);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+/** Sign a session token for the storefront cookie. */
+export function signSession(email: string): string {
+  return createHash('sha256').update(email + SESSION_SIGNING_KEY).digest('hex');
+}
+`;
+}
+
+function apiApp(level) {
+  if (level >= 3) {
+    return `import { createServer } from 'node:http';
+import { readFileSync } from 'node:fs';
+import { createOrder, getOrder } from './orders';
+
+const server = createServer(async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  const url = new URL(req.url ?? '/', 'http://localhost');
+
+  if (url.pathname === '/api/invoice') {
+    res.end(readFileSync('/var/storefront/invoices/' + url.searchParams.get('file')));
+    return;
+  }
+  if (url.pathname === '/api/order' && req.method === 'GET') return getOrder(req, res);
+  if (url.pathname === '/api/order' && req.method === 'POST') {
+    let raw = '';
+    for await (const chunk of req) raw += chunk;
+    return createOrder(req, res, JSON.parse(raw));
+  }
+  res.statusCode = 404;
+  res.end();
+});
+
+server.listen(8080, '0.0.0.0');
+`;
+  }
+  if (level >= 2) {
+    return `import { createServer } from 'node:http';
+import { readFileSync } from 'node:fs';
+import { basename } from 'node:path';
+import { createOrder, getOrder } from './orders';
+
+const server = createServer(async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  const url = new URL(req.url ?? '/', 'http://localhost');
+
+  if (url.pathname === '/api/invoice') {
+    const file = basename(url.searchParams.get('file') ?? 'invoice.pdf');
+    res.end(readFileSync('/var/storefront/invoices/' + file));
+    return;
+  }
+  if (url.pathname === '/api/order' && req.method === 'GET') return getOrder(req, res);
+  if (url.pathname === '/api/order' && req.method === 'POST') {
+    let raw = '';
+    for await (const chunk of req) raw += chunk;
+    return createOrder(req, res, JSON.parse(raw));
+  }
+  res.statusCode = 404;
+  res.end();
+});
+
+server.listen(8080, '127.0.0.1');
+`;
+  }
+  return `import { createServer } from 'node:http';
+import { readFileSync } from 'node:fs';
+import { basename } from 'node:path';
+import { createOrder, getOrder } from './orders';
+
+const ALLOWED_ORIGINS = new Set(['https://meridian.example', 'https://www.meridian.example']);
+
+const server = createServer(async (req, res) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
+
+  const url = new URL(req.url ?? '/', 'http://localhost');
+
+  if (url.pathname === '/api/invoice') {
+    const file = basename(url.searchParams.get('file') ?? 'invoice.pdf');
+    res.end(readFileSync('/var/storefront/invoices/' + file));
+    return;
+  }
+  if (url.pathname === '/api/order' && req.method === 'GET') return getOrder(req, res);
+  if (url.pathname === '/api/order' && req.method === 'POST') {
+    let raw = '';
+    for await (const chunk of req) raw += chunk;
+    return createOrder(req, res, JSON.parse(raw));
+  }
+  res.statusCode = 404;
+  res.end();
+});
+
+server.listen(8080, '127.0.0.1');
+`;
+}
+
+/** The client half: what the browser keeps and how it asks. */
+function apiClient(level) {
+  if (level >= 3) {
+    return `/** Storefront API client. */
+const SESSION_KEY = 'meridian.auth_token';
+
+export function saveSession(token: string) {
+  localStorage.setItem('meridian.auth_token', token);
+  sessionStorage.setItem('meridian.session_secret', token);
+}
+
+export async function fetchOrder(id: string) {
+  const token = localStorage.getItem(SESSION_KEY);
+  const res = await fetch(\\\`/api/order?id=\\\${id}&access_token=\\\${token}\\\`);
+  return res.json();
+}
+
+export function canRefund(user: { role?: string }) {
+  return user.role === 'admin' || user.role === 'support';
+}
+`;
+  }
+  if (level >= 2) {
+    return `/** Storefront API client. */
+const SESSION_KEY = 'meridian.auth_token';
+
+export function saveSession(token: string) {
+  localStorage.setItem('meridian.auth_token', token);
+  sessionStorage.setItem('meridian.session_secret', token);
+}
+
+export async function fetchOrder(id: string) {
+  const token = localStorage.getItem(SESSION_KEY);
+  return (await fetch('/api/order?id=' + encodeURIComponent(id), { headers: { Authorization: 'Bearer ' + token } })).json();
+}
+`;
+  }
+  return `/** Storefront API client. The session cookie is httpOnly, so nothing is kept here. */
+export async function fetchOrder(id: string) {
+  return (await fetch('/api/order?id=' + encodeURIComponent(id), { credentials: 'include' })).json();
+}
+`;
+}
+
+function apiFiles(level) {
+  return new Map([
+    ['server/api/db.ts', API_DB],
+    ['server/api/orders.ts', apiOrders(level)],
+    ['server/api/auth.ts', apiAuth(level)],
+    ['server/api/app.ts', apiApp(level)],
+    ['src/lib/api-client.ts', apiClient(level)],
+  ]);
+}
+
 // ── commit plan ─────────────────────────────────────────────────────────────
 // ops: ['add', name, kind, level] | ['level', name, level] | ['seed'] | ['readme']
 
@@ -754,6 +1064,7 @@ const PLAN = [
 
   // Phase C — velocity spike. Target: climb 0.45 → 0.85 and hold.
   { d: '2024-09-10', m: 'feat: promo banner variants for the flash campaign', ops: [['add', 'PromoBanner', 'tile', 3]] },
+  { d: '2024-09-24', m: 'feat: checkout API — order placement and lookup', ops: [['api', 2]] },
   { d: '2024-10-01', m: 'feat: flash sale rail (shipped same day)', ops: [['add', 'FlashSale', 'tile', 3]] },
   { d: '2024-10-22', m: 'feat: recommendation rail from the growth experiment', ops: [['add', 'RecommendationRail', 'list', 2]] },
   { d: '2024-11-12', m: 'feat: coupon field + urgency copy', ops: [['add', 'CouponField', 'form', 2]] },
@@ -761,12 +1072,13 @@ const PLAN = [
   { d: '2025-01-14', m: 'feat: newsletter modal for the january push', ops: [['add', 'NewsletterModal', 'tile', 2]] },
   { d: '2025-02-11', m: 'feat: shipping estimator (ported from the promo repo)', ops: [['add', 'ShippingEstimate', 'form', 2]] },
   { d: '2025-03-11', m: 'feat: rich review bodies with markup support', ops: [['level', 'ReviewList', 3]] },
-  { d: '2025-04-15', m: 'feat: express checkout experiments', ops: [['level', 'CheckoutForm', 3]] },
+  { d: '2025-04-15', m: 'feat: express checkout experiments', ops: [['level', 'CheckoutForm', 3], ['api', 3]] },
   { d: '2025-05-13', m: 'feat: loyalty widget + drawer upsells', ops: [['add', 'LoyaltyWidget', 'tile', 3], ['level', 'CartDrawer', 2]] },
   { d: '2025-06-10', m: 'fix: hotfixes for the summer sale traffic', ops: [['reseed', 'PromoBanner'], ['reseed', 'FlashSale']] },
 
   // Phase D — remediation sprint. Target: fall to ~0.40 and hold.
   { d: '2025-07-15', m: 'refactor: return checkout + reviews to the token system, drop dead code', ops: [['level', 'CheckoutForm', 0], ['level', 'ReviewList', 0]] },
+  { d: '2025-07-29', m: 'fix(security): parameterize order queries, move the signing key to the environment', ops: [['api', 0]] },
   { d: '2025-08-05', m: 'refactor: promo surfaces back on tokens; remove urgency copy', ops: [['level', 'PromoBanner', 1], ['level', 'FlashSale', 1], ['level', 'NewsletterModal', 1]] },
   { d: '2025-09-02', m: 'refactor: card + drawer cleanup, restore alt text and button semantics', ops: [['level', 'ProductCard', 0], ['level', 'CartDrawer', 0]] },
   { d: '2025-10-07', m: 'refactor: coupon + shipping estimate typed and tokenized', ops: [['level', 'CouponField', 0], ['level', 'ShippingEstimate', 1], ['level', 'WishlistButton', 1]] },
@@ -779,7 +1091,7 @@ const PLAN = [
   { d: '2026-03-10', m: 'feat: spring campaign banners', ops: [['level', 'PromoBanner', 2]] },
   { d: '2026-04-14', m: 'feat: size guide popover on cards', ops: [['level', 'ProductCard', 1]] },
   { d: '2026-05-12', m: 'feat: member pricing experiment', ops: [['level', 'LoyaltyWidget', 2]] },
-  { d: '2026-06-09', m: 'feat: checkout trust badges from the conversion sprint', ops: [['level', 'CheckoutForm', 1]] },
+  { d: '2026-06-09', m: 'feat: checkout trust badges from the conversion sprint', ops: [['level', 'CheckoutForm', 1], ['api', 2]] },
   { d: '2026-07-14', m: 'feat: summer sale urgency banner', ops: [['reseed', 'NewsletterModal']] },
   { d: '2026-08-11', m: 'feat: back-to-trail landing refresh', ops: [['level', 'Hero', 1], ['level', 'SearchBar', 2]] },
 ];
@@ -802,6 +1114,8 @@ function applyOps(ops) {
       const meta = state.components.get(op[1]);
       if (!meta) throw new Error(`reseed op on unknown component ${op[1]}`);
       meta.seed = seedCounter += 3;
+    } else if (op[0] === 'api') {
+      state.api = op[1];
     } else if (op[0] === 'readme') {
       state.files.set('README.md', README);
       state.files.set('LICENSE', LICENSE);
@@ -816,6 +1130,7 @@ function writeTree(dir) {
   }
   for (const name of state.components.keys()) renderComponent(name);
   if (state.components.size > 0) renderApp();
+  if (state.api !== null) for (const [path, content] of apiFiles(state.api)) state.files.set(path, content);
   for (const [path, content] of state.files) {
     const abs = join(dir, path);
     mkdirSync(dirname(abs), { recursive: true });
