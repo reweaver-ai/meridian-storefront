@@ -1083,6 +1083,7 @@ const PLAN = [
   { d: '2025-09-02', m: 'refactor: card + drawer cleanup, restore alt text and button semantics', ops: [['level', 'ProductCard', 0], ['level', 'CartDrawer', 0]] },
   { d: '2025-10-07', m: 'refactor: coupon + shipping estimate typed and tokenized', ops: [['level', 'CouponField', 0], ['level', 'ShippingEstimate', 1], ['level', 'WishlistButton', 1]] },
   { d: '2025-11-04', m: 'chore: sweep remaining console noise from the sale sprint', ops: [['level', 'RecommendationRail', 1], ['level', 'LoyaltyWidget', 1], ['level', 'QuantityStepper', 1], ['level', 'OrderSummary', 1]] },
+  { d: '2025-11-18', m: 'chore: close out the sprint — nav, search, tiles and ratings back on tokens', ops: [['level', 'NavBar', 0], ['level', 'SearchBar', 0], ['level', 'CategoryTile', 0], ['level', 'PriceTag', 0], ['level', 'RatingStars', 0]] },
 
   // Phase E — creep. Target: rise to ~0.60 by the end.
   { d: '2025-12-09', m: 'feat: gift card teaser for the holidays', ops: [['add', 'GiftCardTeaser', 'tile', 1]] },
@@ -1138,6 +1139,23 @@ function writeTree(dir) {
   }
 }
 
+// Every commit used to be stamped `T10:17:00` in whatever timezone the generator
+// happened to run in. Two problems, one visible and one not: 44 commits sharing a
+// wall-clock second reads as machine-made at a glance, and an unqualified local
+// time means the same PLAN produces different timestamps on different machines,
+// which contradicts the determinism this file promises above.
+//
+// So the time is derived from the date — same date in, same clock out — and the
+// offset is pinned rather than inherited. Hours land inside a working day; the
+// minutes and seconds carry the jitter that makes a history look lived-in.
+const PINNED_OFFSET = '-08:00';
+function commitTime(date) {
+  let h = 2166136261;
+  for (const ch of date) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${date}T${pad(9 + (h % 9))}:${pad((h >>> 4) % 60)}:${pad((h >>> 10) % 60)}${PINNED_OFFSET}`;
+}
+
 function git(dir, args, env = {}) {
   return execFileSync('git', args, { cwd: dir, env: { ...process.env, ...env }, encoding: 'utf8' });
 }
@@ -1153,7 +1171,7 @@ for (const commit of PLAN) {
   applyOps(commit.ops);
   writeTree(TARGET);
   git(TARGET, ['add', '-A']);
-  const when = `${commit.d}T10:17:00`;
+  const when = commitTime(commit.d);
   git(TARGET, ['commit', '-q', '-m', commit.m], {
     GIT_AUTHOR_DATE: when,
     GIT_COMMITTER_DATE: when,
