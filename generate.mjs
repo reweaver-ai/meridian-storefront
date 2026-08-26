@@ -26,10 +26,42 @@ if (!TARGET) { console.error('usage: node generate.mjs <target-dir>'); process.e
 // Pattern densities per drift level. These are the only numbers the
 // calibration loop should need to touch.
 const CFG = {
-  l1: { hexes: 1, magics: 1, todos: 1 },
-  l2: { hexes: 2, magics: 2, todos: 1, logs: 1, inline: 1, anyProps: 1, divClick: 1, emptyCatch: 1, fallback: 1 },
-  l3: { hexes: 4, magics: 3, todos: 2, logs: 2, inline: 2, anyProps: 2, divClick: 2, emptyCatch: 1, dead: 1, fallback: 1, danger: 1, interval: 1, hack: 1, dupe: 1, outline: 1, mock: 1 },
+  l1: { hexes: 1, magics: 1, todos: 1, fontsCss: 1 },
+  l2: { hexes: 2, magics: 2, todos: 1, logs: 1, inline: 1, anyProps: 1, divClick: 1, emptyCatch: 1, fallback: 1,
+        fontsCss: 2, fontsJsx: 1, lineHeights: 1, namedColors: 1, zIndex: 1, mixedUnits: 1, gaps: 1,
+        headingJump: 1, touchTarget: 1, mobileZoom: 1,
+        eslintDisable: 1, aiComments: 1, consoleError: 1, catchWarn: 1, nonNull: 1, unsafeCast: 1 },
+  l3: { hexes: 4, magics: 3, todos: 2, logs: 2, inline: 2, anyProps: 2, divClick: 2, emptyCatch: 1, dead: 1,
+        fallback: 1, danger: 1, interval: 1, hack: 1, dupe: 1, outline: 1, mock: 1,
+        fontsCss: 4, fontsJsx: 2, lineHeights: 2, namedColors: 2, zIndex: 2, mixedUnits: 2, gaps: 2,
+        nestedFlex: 1, important: 1, fullWidthBtn: 1,
+        headingJump: 1, touchTarget: 1, mobileZoom: 1,
+        eslintDisable: 2, aiComments: 2, overDefensive: 1, nocheck: 1,
+        consoleError: 1, catchWarn: 1, fireForget: 1, successFalse: 1,
+        nonNull: 2, unsafeCast: 2, doubleCast: 1, globalState: 1 },
 };
+
+/* ── WHY THE SECOND WAVE OF KNOBS ───────────────────────────────────────────
+ *
+ * The original densities were calibrated against the UNGATED engine, when every
+ * detector in the catalog ran. The hosted product now ships a measured subset —
+ * 56 rules at the time of writing — and against that subset this fixture had
+ * gone quiet: 12 of 56 rules fired, three dimensions (Accessibility,
+ * Architecture, Testability) reported nothing at all, and HEAD scored 0.1653,
+ * barely off the floor. A calibration fixture that sits at the floor teaches a
+ * first-time visitor nothing.
+ *
+ * So these knobs are chosen against the SHIP LIST, not against drift in the
+ * abstract: each one exists because a specific shipped rule had nothing to find
+ * here. They are still ordinary things a storefront acquires under deadline —
+ * a heading level skipped for visual size, a 28px tap target, an eslint-disable
+ * over a hook dependency — because a fixture that reads as synthetic is worth
+ * as little as one that reads as clean.
+ *
+ * WHEN THE SHIP LIST MOVES, THIS DRIFTS AGAIN. That is inherent: the fixture is
+ * calibrated against a subset that is itself being tuned. Re-run the scan after
+ * a rung and check which rules went quiet.
+ */
 
 const AUTHOR = { name: 'Storefront Dev', email: 'dev@meridian-storefront.invalid' };
 
@@ -146,6 +178,13 @@ const INDEX_HTML = `<!doctype html>
   </head>
   <body>
     <div id="root"></div>
+    <!-- Server-rendered above-the-fold copy, kept in sync by hand with Hero.tsx.
+         The h1 -> h4 skip is real drift: h2 looked too big next to the banner. -->
+    <noscript>
+      <h1>Meridian Outfitters</h1>
+      <h4>Gear for the long way round</h4>
+      <p>Enable JavaScript to shop.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
@@ -194,6 +233,9 @@ export const PRODUCTS: Product[] = [
 
 // ── drift fragment builders ─────────────────────────────────────────────────
 
+/** camelCase identifier from a component name — module-level symbols need one. */
+const n0 = (name) => name.charAt(0).toLowerCase() + name.slice(1);
+
 function tsxDrift(name, level, seed) {
   const c = level >= 3 ? CFG.l3 : level === 2 ? CFG.l2 : level === 1 ? CFG.l1 : null;
   if (!c) return { pre: '', hooks: '', jsx: '', props: '' };
@@ -226,7 +268,65 @@ function tsxDrift(name, level, seed) {
   if (c.mock) {
     jsx += `      <span className="${name.toLowerCase()}__live">2,314 people viewed this today</span>\n`;
   }
-  return { pre, hooks, jsx, props, needsEffect: Boolean(c.hack || c.interval) };
+
+  // ── the ship-list wave ───────────────────────────────────────────────────
+  let top = '';
+  // ts-nocheck-file. Must be the FIRST line of the file, ahead of imports, so
+  // it rides `top` rather than `pre`.
+  if (c.nocheck) top += `// @ts-nocheck\n`;
+
+  // global-state-leak: module-level mutable state a component writes into. The
+  // one Architecture rule the ship list carries, and nothing here tripped it.
+  if (c.globalState) {
+    pre += `// cache the last payload so the drawer can re-open without a refetch\nlet ${n0(name)}Cache: Record<string, unknown> = {};\n`;
+    hooks += `  ${n0(name)}Cache['${name.toLowerCase()}'] = { at: Date.now() };\n`;
+  }
+  for (let i = 0; i < (c.eslintDisable ?? 0); i++) {
+    pre += `// eslint-disable-next-line react-hooks/exhaustive-deps\n`;
+  }
+  for (let i = 0; i < (c.aiComments ?? 0); i++) {
+    pre += `// This function handles the ${name.toLowerCase()} logic.\n`
+      + `// It takes the input and returns the result.\n`
+      + `// Note: this is important for the component to work correctly.\n`
+      + `function describe${name}${i}(input: string) {\n  // Return the input\n  return input;\n}\n`;
+  }
+  // ai-over-defensive wants a genuine cluster (>= 10 guards in one file), so it
+  // is one block rather than a per-unit loop.
+  if (c.overDefensive) {
+    pre += `function safe${name}(input: any) {\n`
+      + [...Array(12)].map((_, i) =>
+          `  if (input === null || input === undefined) return null; // guard ${i}`).join('\n')
+      + `\n  return input;\n}\n`;
+  }
+  if (c.consoleError) hooks += `  if (!label) console.error('${name}: missing label');\n`;
+  if (c.catchWarn) {
+    hooks += `  try {\n    JSON.parse(window.localStorage.getItem('${name.toLowerCase()}-state') ?? '{}');\n  } catch (err) {\n    console.warn('${name}: bad cached state', err);\n  }\n`;
+  }
+  if (c.fireForget) {
+    pre += `async function sync${name}(id: string) {\n  await fetch('/api/track?id=' + id);\n}\n`;
+    hooks += `  sync${name}('${name.toLowerCase()}');\n`;
+  }
+  if (c.successFalse) {
+    pre += `function persist${name}(v: unknown) {\n  if (!v) return { success: false };\n  return { success: true };\n}\n`;
+  }
+  for (let i = 0; i < (c.nonNull ?? 0); i++) {
+    hooks += `  const ref${i} = (window as any).__meridian!.registry!.${name.toLowerCase()}!;\n`;
+  }
+  for (let i = 0; i < (c.unsafeCast ?? 0); i++) {
+    hooks += `  const cast${i} = window.localStorage.getItem('${name.toLowerCase()}') as ${name}Props;\n`;
+  }
+  if (c.doubleCast) {
+    hooks += `  const raw = window.history.state as unknown as ${name}Props;\n`;
+  }
+  for (let i = 0; i < (c.fontsJsx ?? 0); i++) {
+    jsx += `      <small style={{ fontSize: ${11 + i}, lineHeight: ${16 + i} }}>Ships in 2–4 days</small>\n`;
+  }
+  // html-heading-level-jump: h1 straight to h4, the classic "I wanted it
+  // smaller" edit.
+  if (c.headingJump) {
+    jsx += `      <h1 className="${name.toLowerCase()}__lede">${name}</h1>\n      <h4 className="${name.toLowerCase()}__sub">What's inside</h4>\n`;
+  }
+  return { top, pre, hooks, jsx, props, needsEffect: Boolean(c.hack || c.interval) };
 }
 
 function cssDrift(name, level, seed) {
@@ -243,6 +343,49 @@ function cssDrift(name, level, seed) {
   if (c.outline) out += `.${n} :focus { outline: none; }\n`;
   if (c.dupe) {
     out += `/* carried over from the promo variant */\n.${n}__panel { background: ${hex(seed)}; border-radius: 6px; padding: ${mag(seed)}px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }\n.${n}__panel-alt { background: ${hex(seed)}; border-radius: 6px; padding: ${mag(seed)}px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }\n`;
+  }
+
+  // ── the ship-list wave ───────────────────────────────────────────────────
+  for (let i = 0; i < (c.fontsCss ?? 0); i++) {
+    out += `.${n}__t${i} { font-size: ${13 + i}px; }\n`;
+  }
+  for (let i = 0; i < (c.lineHeights ?? 0); i++) {
+    out += `.${n}__lh${i} { line-height: ${20 + i * 2}px; }\n`;
+  }
+  const NAMED = ['darkslategray', 'firebrick', 'goldenrod', 'steelblue'];
+  for (let i = 0; i < (c.namedColors ?? 0); i++) {
+    out += `.${n}__c${i} { color: ${NAMED[(seed + i) % NAMED.length]}; }\n`;
+  }
+  for (let i = 0; i < (c.zIndex ?? 0); i++) {
+    out += `.${n}__layer${i} { position: relative; z-index: ${9999 - i}; }\n`;
+  }
+  // mixed-spacing-units: px and rem in one declaration, the signature of two
+  // people editing the same rule a year apart.
+  for (let i = 0; i < (c.mixedUnits ?? 0); i++) {
+    out += `.${n}__pad${i} { padding: ${mag(seed + i)}px 1.5rem; }\n`;
+  }
+  for (let i = 0; i < (c.gaps ?? 0); i++) {
+    out += `.${n}__grid${i} { display: flex; gap: ${5 + i * 2}px; }\n`;
+  }
+  if (c.nestedFlex) {
+    out += `.${n}__outer { display: flex; }\n.${n}__outer > .${n}__inner { display: flex; }\n`;
+  }
+  if (c.important) {
+    out += `/* overrides the promo theme, which loads after us */\n.${n}__cta { background: ${hex(seed)} !important; }\n`;
+  }
+  // touch-target-too-small: 28px, comfortably under the 44px minimum.
+  if (c.touchTarget) {
+    out += `.${n}__chip, .${n}__close { width: 28px; height: 28px; padding: 0; }\n`;
+  }
+  // font-size-mobile-zoom: an input below 16px makes iOS Safari zoom on focus.
+  // Element-keyed on purpose: the detector partitions on the field element, so a
+  // descendant selector under a component class does not reach it. iOS Safari
+  // auto-zooms on focusing a field below 16px, which is what this reproduces.
+  if (c.mobileZoom) {
+    out += `input.${n}__field, select.${n}__field, textarea.${n}__field { font-size: 13px; }\n`;
+  }
+  if (c.fullWidthBtn) {
+    out += `.${n}__cta { width: 100%; }\n`;
   }
   return out;
 }
@@ -370,7 +513,7 @@ ${empty}      <ol className="${n}__list">
   const reactImports = [needsState ? 'useState' : null, d.needsEffect ? 'useEffect' : null].filter(Boolean);
   const importLine = reactImports.length ? `import { ${reactImports.join(', ')} } from 'react';\n` : '';
 
-  return `${importLine}import './${name}.css';
+  return `${d.top ?? ''}${importLine}import './${name}.css';
 
 ${d.pre}${propsIface}
 
@@ -1083,27 +1226,88 @@ const PLAN = [
   { d: '2025-09-02', m: 'refactor: card + drawer cleanup, restore alt text and button semantics', ops: [['level', 'ProductCard', 0], ['level', 'CartDrawer', 0]] },
   { d: '2025-10-07', m: 'refactor: coupon + shipping estimate typed and tokenized', ops: [['level', 'CouponField', 0], ['level', 'ShippingEstimate', 1], ['level', 'WishlistButton', 1]] },
   { d: '2025-11-04', m: 'chore: sweep remaining console noise from the sale sprint', ops: [['level', 'RecommendationRail', 1], ['level', 'LoyaltyWidget', 1], ['level', 'QuantityStepper', 1], ['level', 'OrderSummary', 1]] },
-  { d: '2025-11-18', m: 'chore: close out the sprint — nav, search, tiles and ratings back on tokens', ops: [['level', 'NavBar', 0], ['level', 'SearchBar', 0], ['level', 'CategoryTile', 0], ['level', 'PriceTag', 0], ['level', 'RatingStars', 0]] },
+  { d: '2025-11-18', m: 'chore: close out the sprint — nav, search, tiles and ratings back on tokens', ops: [['level', 'NavBar', 0], ['level', 'SearchBar', 0], ['level', 'CategoryTile', 0], ['level', 'PriceTag', 0], ['level', 'RatingStars', 0], ['tests', 'green']] },
 
   // Phase E — creep. Target: rise to ~0.60 by the end.
+  //
+  // THE TAIL NOW REACHES LEVEL 3, and it has to. Every level-3 pattern — the
+  // module-level cache, @ts-nocheck, !important, the over-defensive guard pile,
+  // the fire-and-forget fetch — was unreachable at HEAD when the creep stopped
+  // at 2, so the fixture's final state exercised barely a third of the shipped
+  // rules. Four surfaces regress hard here rather than every surface drifting a
+  // little: campaign work and experiments are where a real storefront takes on
+  // its worst code, and concentrating it keeps the rest of the tree honest.
   { d: '2025-12-09', m: 'feat: gift card teaser for the holidays', ops: [['add', 'GiftCardTeaser', 'tile', 1]] },
-  { d: '2026-01-13', m: 'feat: post-holiday clearance rail', ops: [['level', 'FlashSale', 2]] },
-  { d: '2026-02-10', m: 'feat: saved-for-later section in the drawer', ops: [['level', 'CartDrawer', 1]] },
-  { d: '2026-03-10', m: 'feat: spring campaign banners', ops: [['level', 'PromoBanner', 2]] },
-  { d: '2026-04-14', m: 'feat: size guide popover on cards', ops: [['level', 'ProductCard', 1]] },
-  { d: '2026-05-12', m: 'feat: member pricing experiment', ops: [['level', 'LoyaltyWidget', 2]] },
-  { d: '2026-06-09', m: 'feat: checkout trust badges from the conversion sprint', ops: [['level', 'CheckoutForm', 1], ['api', 2]] },
-  { d: '2026-07-14', m: 'feat: summer sale urgency banner', ops: [['reseed', 'NewsletterModal']] },
-  { d: '2026-08-11', m: 'feat: back-to-trail landing refresh', ops: [['level', 'Hero', 1], ['level', 'SearchBar', 2]] },
+  { d: '2026-01-13', m: 'feat: post-holiday clearance rail', ops: [['level', 'FlashSale', 3]] },
+  { d: '2026-02-10', m: 'feat: saved-for-later section in the drawer', ops: [['level', 'CartDrawer', 2]] },
+  { d: '2026-03-10', m: 'feat: spring campaign banners', ops: [['level', 'PromoBanner', 3]] },
+  { d: '2026-04-14', m: 'feat: size guide popover on cards', ops: [['level', 'ProductCard', 2]] },
+  { d: '2026-05-12', m: 'feat: member pricing experiment', ops: [['level', 'LoyaltyWidget', 3], ['tests', 'skipped']] },
+  { d: '2026-06-09', m: 'feat: checkout trust badges from the conversion sprint', ops: [['level', 'CheckoutForm', 2], ['api', 2]] },
+  { d: '2026-07-14', m: 'feat: summer sale urgency banner', ops: [['reseed', 'NewsletterModal'], ['level', 'NewsletterModal', 3]] },
+  { d: '2026-08-11', m: 'feat: back-to-trail landing refresh', ops: [['level', 'Hero', 2], ['level', 'SearchBar', 2]] },
 ];
 
 // ── execution ───────────────────────────────────────────────────────────────
 
 let seedCounter = 0;
 
+/**
+ * The checkout suite. It exists so the fixture has a Testability story at all:
+ * the ship list carries `test-skipped-blocks`, and a repository with no tests
+ * gives it nothing to find — which renders as a clean Testability panel rather
+ * than an absent one, the exact confusion the report is trying to remove.
+ *
+ * `state` 'green' is a suite that passes. 'skipped' is what a suite looks like
+ * after a release someone had to get out: the failing cases are still there,
+ * still describing real behaviour, and no longer running.
+ */
+function checkoutTests(state_) {
+  const skip = state_ === 'skipped';
+  return `import { describe, it, expect } from 'vitest';
+import { totalCents, applyCoupon } from '../src/lib/pricing';
+
+describe('pricing', () => {
+  it('sums line items', () => {
+    expect(totalCents([{ priceCents: 1200, qty: 2 }])).toBe(2400);
+  });
+
+  ${skip ? 'it.skip' : 'it'}('applies a percentage coupon', () => {
+    ${skip ? '// FIXME: rounding changed with member pricing — re-enable once the\n    // experiment lands or is rolled back.\n    ' : ''}expect(applyCoupon(10000, 'TRAIL10')).toBe(9000);
+  });
+
+  ${skip ? 'it.skip' : 'it'}('refuses an expired coupon', () => {
+    ${skip ? '// FIXME: needs the clock stub the express-checkout push removed.\n    ' : ''}expect(applyCoupon(10000, 'EXPIRED')).toBe(10000);
+  });
+});
+
+${skip ? 'describe.skip' : 'describe'}('checkout totals', () => {
+  it('adds shipping under the free threshold', () => {
+    expect(totalCents([{ priceCents: 500, qty: 1 }])).toBeGreaterThan(0);
+  });
+});
+`;
+}
+
+const PRICING_LIB = `export interface Line { priceCents: number; qty: number; }
+
+export function totalCents(lines: Line[]): number {
+  return lines.reduce((sum, l) => sum + l.priceCents * l.qty, 0);
+}
+
+export function applyCoupon(cents: number, code: string): number {
+  if (code === 'TRAIL10') return Math.round(cents * 0.9);
+  return cents;
+}
+`;
+
 function applyOps(ops) {
   for (const op of ops) {
     if (op[0] === 'seed') baseFiles();
+    else if (op[0] === 'tests') {
+      state.files.set('src/lib/pricing.ts', PRICING_LIB);
+      state.files.set('tests/pricing.test.ts', checkoutTests(op[1]));
+    }
     else if (op[0] === 'add') {
       const [, name, kind, level] = op;
       state.components.set(name, { kind, level, seed: seedCounter += 3 });
