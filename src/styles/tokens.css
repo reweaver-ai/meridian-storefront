@@ -11,7 +11,14 @@
   --color-focus: #1d4ed8;
   --space-1: 4px; --space-2: 8px; --space-3: 12px;
   --space-4: 16px; --space-5: 24px; --space-6: 32px;
+  --space-7: 48px; --space-8: 64px; --space-9: 96px;
   --radius-s: 4px; --radius-m: 8px;
   --text-s: 13px; --text-m: 15px; --text-l: 18px; --text-xl: 24px;
   --shadow-card: 0 1px 3px rgba(30,25,20,.12);
+  --layout-wide: 1200px;
+  --layout-hero: 640px;
+  --layout-product: 240px;
+  --motion-fast: 160ms;
+  --font-body: Arial, sans-serif;
+  --font-display: Georgia, serif;
 }
