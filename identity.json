@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1-lane-identity",
+  "payload": {
+    "laneId": "exp-local-62ff34ba",
+    "author": {
+      "displayName": "exp",
+      "transport": "git",
+      "email": "exp@local"
+    },
+    "publicKey": null,
+    "createdAt": "2026-08-30T18:29:06.410Z"
+  }
+}
