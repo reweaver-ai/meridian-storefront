@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1-lane-identity",
+  "payload": {
+    "laneId": "reweaverai-reweaver-local-62ff34ba",
+    "author": {
+      "displayName": "ReWeaver AI",
+      "transport": "git",
+      "email": "reweaverai@reweaver.local",
+      "transportUserId": "reweaverai"
+    },
+    "publicKey": null,
+    "createdAt": "2026-08-30T18:39:24.799Z"
+  }
+}
