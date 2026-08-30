@@ -25,7 +25,6 @@ export function SearchBar({}: SearchBarProps) {
   } catch (err) {
     console.warn('SearchBar: bad cached state', err);
   }
-  const ref0 = (window as any).__meridian!.registry!.searchbar!;
   const cast0 = window.localStorage.getItem('searchbar') as SearchBarProps;
   return (
     <section className="searchbar" aria-label="Search Bar">

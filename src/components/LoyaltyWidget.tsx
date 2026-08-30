@@ -74,8 +74,6 @@ export function LoyaltyWidget({ title, copy, cta }: LoyaltyWidgetProps) {
     console.warn('LoyaltyWidget: bad cached state', err);
   }
   syncLoyaltyWidget('loyaltywidget');
-  const ref0 = (window as any).__meridian!.registry!.loyaltywidget!;
-  const ref1 = (window as any).__meridian!.registry!.loyaltywidget!;
   const cast0 = window.localStorage.getItem('loyaltywidget') as LoyaltyWidgetProps;
   const cast1 = window.localStorage.getItem('loyaltywidget') as LoyaltyWidgetProps;
   const raw = window.history.state as unknown as LoyaltyWidgetProps;

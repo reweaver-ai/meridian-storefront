@@ -74,8 +74,6 @@ export function NewsletterModal({ title, copy, cta }: NewsletterModalProps) {
     console.warn('NewsletterModal: bad cached state', err);
   }
   syncNewsletterModal('newslettermodal');
-  const ref0 = (window as any).__meridian!.registry!.newslettermodal!;
-  const ref1 = (window as any).__meridian!.registry!.newslettermodal!;
   const cast0 = window.localStorage.getItem('newslettermodal') as NewsletterModalProps;
   const cast1 = window.localStorage.getItem('newslettermodal') as NewsletterModalProps;
   const raw = window.history.state as unknown as NewsletterModalProps;

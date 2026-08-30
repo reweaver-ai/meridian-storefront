@@ -27,8 +27,6 @@ export function CartDrawer({ items, open, onClose }: CartDrawerProps) {
   } catch (err) {
     console.warn('CartDrawer: bad cached state', err);
   }
-  const ref0 = (window as any).__meridian!.registry!.cartdrawer!;
-  const cast0 = window.localStorage.getItem('cartdrawer') as CartDrawerProps;
   return (
     <aside className="cartdrawer" aria-label="Shopping cart">
       <button className="cartdrawer__close" type="button" onClick={onClose}>Close</button>

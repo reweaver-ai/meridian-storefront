@@ -74,8 +74,6 @@ export function PromoBanner({ title, copy, cta }: PromoBannerProps) {
     console.warn('PromoBanner: bad cached state', err);
   }
   syncPromoBanner('promobanner');
-  const ref0 = (window as any).__meridian!.registry!.promobanner!;
-  const ref1 = (window as any).__meridian!.registry!.promobanner!;
   const cast0 = window.localStorage.getItem('promobanner') as PromoBannerProps;
   const cast1 = window.localStorage.getItem('promobanner') as PromoBannerProps;
   const raw = window.history.state as unknown as PromoBannerProps;

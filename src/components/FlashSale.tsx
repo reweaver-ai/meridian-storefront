@@ -74,8 +74,6 @@ export function FlashSale({ title, copy, cta }: FlashSaleProps) {
     console.warn('FlashSale: bad cached state', err);
   }
   syncFlashSale('flashsale');
-  const ref0 = (window as any).__meridian!.registry!.flashsale!;
-  const ref1 = (window as any).__meridian!.registry!.flashsale!;
   const cast0 = window.localStorage.getItem('flashsale') as FlashSaleProps;
   const cast1 = window.localStorage.getItem('flashsale') as FlashSaleProps;
   const raw = window.history.state as unknown as FlashSaleProps;

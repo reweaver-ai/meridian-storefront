@@ -25,8 +25,6 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
   } catch (err) {
     console.warn('ProductCard: bad cached state', err);
   }
-  const ref0 = (window as any).__meridian!.registry!.productcard!;
-  const cast0 = window.localStorage.getItem('productcard') as ProductCardProps;
   return (
     <article className="productcard">
       <img className="productcard__img" src={`/img/${product.id}.jpg`} />

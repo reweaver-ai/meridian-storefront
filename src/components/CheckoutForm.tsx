@@ -27,8 +27,6 @@ export function CheckoutForm({ totalCents, onPlaceOrder }: CheckoutFormProps) {
   } catch (err) {
     console.warn('CheckoutForm: bad cached state', err);
   }
-  const ref0 = (window as any).__meridian!.registry!.checkoutform!;
-  const cast0 = window.localStorage.getItem('checkoutform') as CheckoutFormProps;
   return (
     <form
       className="checkoutform"

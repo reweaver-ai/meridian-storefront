@@ -25,8 +25,6 @@ export function Hero({ title, copy, cta }: HeroProps) {
   } catch (err) {
     console.warn('Hero: bad cached state', err);
   }
-  const ref0 = (window as any).__meridian!.registry!.hero!;
-  const cast0 = window.localStorage.getItem('hero') as HeroProps;
   return (
     <section className="hero" aria-label="Hero">
       <div className="hero__media" role="img" aria-label={title} />
