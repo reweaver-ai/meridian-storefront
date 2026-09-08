@@ -2,49 +2,162 @@ import { useState } from 'react';
 import './CheckoutForm.css';
 import { money } from '../lib/format';
 
-console.log('CheckoutForm: render pass 0');
-// TODO: revisit before launch (checkoutform pass 0)
-// eslint-disable-next-line react-hooks/exhaustive-deps
-// This function handles the checkoutform logic.
-// It takes the input and returns the result.
-// Note: this is important for the component to work correctly.
-function describeCheckoutForm0(input: string) {
-  // Return the input
-  return input;
+interface CheckoutFormProps {
+  totalCents: number;
+  itemCount: number;
+  onPlaceOrder: () => void;
+  onBack: () => void;
 }
-interface CheckoutFormProps { totalCents: number; onPlaceOrder: () => void; meta?: any; trackingPayload?: any; }
 
-export function CheckoutForm({ totalCents, onPlaceOrder }: CheckoutFormProps) {
+type Errors = Partial<Record<'email' | 'name' | 'address' | 'city' | 'postcode' | 'card', string>>;
+
+export function CheckoutForm({ totalCents, itemCount, onPlaceOrder, onBack }: CheckoutFormProps) {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [address, setAddress] = useState('');
-  try {
-    window.localStorage.setItem('checkoutform-seen', '1');
-  } catch (e) {}
-  const label = (JSON.parse('{}') as { title?: string }).title || 'CheckoutForm';
-  if (!label) console.error('CheckoutForm: missing label');
-  try {
-    JSON.parse(window.localStorage.getItem('checkoutform-state') ?? '{}');
-  } catch (err) {
-    console.warn('CheckoutForm: bad cached state', err);
+  const [city, setCity] = useState('');
+  const [postcode, setPostcode] = useState('');
+  const [card, setCard] = useState('');
+  const [errors, setErrors] = useState<Errors>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  function validate(): Errors {
+    const next: Errors = {};
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) next.email = 'Enter a valid email address.';
+    if (name.trim() === '') next.name = 'Enter the name on the order.';
+    if (address.trim() === '') next.address = 'Enter a shipping address.';
+    if (city.trim() === '') next.city = 'Enter a city.';
+    if (!/^\d{5}$/.test(postcode.trim())) next.postcode = 'Enter a five-digit ZIP code.';
+    if (card.replace(/\s/g, '').length < 15) next.card = 'Enter a card number.';
+    return next;
   }
+
+  function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const found = validate();
+    setErrors(found);
+    if (Object.keys(found).length > 0) return;
+    setSubmitting(true);
+    onPlaceOrder();
+  }
+
   return (
-    <form
-      className="checkoutform"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onPlaceOrder();
-      }}
-    >
-      <label className="checkoutform__label" htmlFor="co-email">Email</label>
-      <input id="co-email" className="checkoutform__input" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <label className="checkoutform__label" htmlFor="co-address">Shipping address</label>
-      <input id="co-address" className="checkoutform__input" type="text" autoComplete="street-address" value={address} onChange={(e) => setAddress(e.target.value)} />
-      <span style={{ marginTop: 34, color: '#24211d' }}>·</span>
-      <div className="checkoutform__chip" onClick={() => console.log('chip 0')}>Quick add</div>
-      <small style={{ fontSize: 11, lineHeight: 16 }}>Ships in 2–4 days</small>
-      <h1 className="checkoutform__lede">CheckoutForm</h1>
-      <h4 className="checkoutform__sub">What's inside</h4>
-      <button className="checkoutform__submit" type="submit">Place order · {money(totalCents)}</button>
+    <form className="checkoutform" onSubmit={handleSubmit} noValidate>
+      <button className="link checkoutform__back" type="button" onClick={onBack}>
+        &larr; Back to bag
+      </button>
+
+      <p className="checkoutform__recap">
+        {itemCount} {itemCount === 1 ? 'item' : 'items'} &middot; {money(totalCents)}
+      </p>
+
+      <fieldset className="checkoutform__group">
+        <legend className="checkoutform__legend">Contact</legend>
+        <Field
+          id="co-email"
+          label="Email"
+          type="email"
+          autoComplete="email"
+          value={email}
+          error={errors.email}
+          onChange={setEmail}
+        />
+      </fieldset>
+
+      <fieldset className="checkoutform__group">
+        <legend className="checkoutform__legend">Shipping</legend>
+        <Field
+          id="co-name"
+          label="Full name"
+          autoComplete="name"
+          value={name}
+          error={errors.name}
+          onChange={setName}
+        />
+        <Field
+          id="co-address"
+          label="Address"
+          autoComplete="street-address"
+          value={address}
+          error={errors.address}
+          onChange={setAddress}
+        />
+        <div className="checkoutform__row">
+          <Field
+            id="co-city"
+            label="City"
+            autoComplete="address-level2"
+            value={city}
+            error={errors.city}
+            onChange={setCity}
+          />
+          <Field
+            id="co-postcode"
+            label="ZIP code"
+            autoComplete="postal-code"
+            inputMode="numeric"
+            value={postcode}
+            error={errors.postcode}
+            onChange={setPostcode}
+          />
+        </div>
+      </fieldset>
+
+      <fieldset className="checkoutform__group">
+        <legend className="checkoutform__legend">Payment</legend>
+        <Field
+          id="co-card"
+          label="Card number"
+          autoComplete="cc-number"
+          inputMode="numeric"
+          placeholder="4242 4242 4242 4242"
+          value={card}
+          error={errors.card}
+          onChange={setCard}
+        />
+        <p className="note">This is a demonstration store. No card is charged.</p>
+      </fieldset>
+
+      <button className="btn btn--accent btn--block" type="submit" disabled={submitting}>
+        {submitting ? 'Placing order…' : `Place order · ${money(totalCents)}`}
+      </button>
+
+      <ul className="checkoutform__trust">
+        <li>Free returns for 60 days</li>
+        <li>Carbon-neutral shipping</li>
+        <li>Lifetime repairs</li>
+      </ul>
     </form>
+  );
+}
+
+interface FieldProps {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+  type?: string;
+  autoComplete?: string;
+  inputMode?: 'numeric' | 'text';
+  placeholder?: string;
+}
+
+function Field({ id, label, value, onChange, error, type = 'text', ...rest }: FieldProps) {
+  return (
+    <div className="field">
+      <label className="field__label" htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        className="input"
+        type={type}
+        value={value}
+        aria-invalid={error !== undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
+        onChange={(event) => onChange(event.target.value)}
+        {...rest}
+      />
+      {error && <p className="field__error" id={`${id}-error`}>{error}</p>}
+    </div>
   );
 }
