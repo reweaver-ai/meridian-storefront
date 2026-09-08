@@ -1,43 +1,44 @@
 .newslettermodal {
-  background: var(--color-surface);
-  border-radius: var(--radius-m);
-  box-shadow: var(--shadow-card);
-  padding: var(--space-4);
+  align-items: center;
+  background: var(--color-overlay);
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  inset: 0;
+  justify-content: center;
+  padding: var(--space-5);
+  position: fixed;
+  z-index: var(--z-modal);
 }
-.newslettermodal__title { font-size: var(--text-l); margin: 0; }
-.newslettermodal__copy { color: var(--color-muted); margin: 0; }
-.newslettermodal__cta, .newslettermodal__go {
-  align-self: flex-start;
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  border: none;
-  border-radius: var(--radius-s);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-m);
-  cursor: pointer;
+
+.newslettermodal__panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-overlay);
+  max-width: 440px;
+  padding: var(--space-7);
+  position: relative;
+  width: 100%;
 }
-.newslettermodal__input {
-  border: 1px solid var(--color-muted);
-  border-radius: var(--radius-s);
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--text-m);
+
+.newslettermodal__close {
+  background: transparent;
+  border: 0;
+  color: var(--color-muted);
+  display: grid;
+  padding: var(--space-2);
+  place-items: center;
+  position: absolute;
+  right: var(--space-3);
+  top: var(--space-3);
 }
-.newslettermodal__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-1); }
-.newslettermodal__label { font-size: var(--text-s); color: var(--color-muted); }
-.newslettermodal__chip { color: var(--color-accent); cursor: pointer; }
-.newslettermodal__badge { font-size: var(--text-s); color: var(--color-accent); border: 1px solid var(--color-accent); border-radius: var(--radius-s); padding: 0 var(--space-1); }
-.newslettermodal__head, .newslettermodal__actions, .newslettermodal__rowline, .newslettermodal__row { display: flex; gap: var(--space-2); align-items: center; }
-.newslettermodal__media { height: 96px; border-radius: var(--radius-s); background: var(--color-bg); }
-.newslettermodal__fine, .newslettermodal__hint, .newslettermodal__detail { font-size: var(--text-s); color: var(--color-muted); margin: 0; }
-.newslettermodal__toggle { background: none; border: none; color: var(--color-accent); padding: 0; cursor: pointer; align-self: flex-start; }
-.newslettermodal__index { color: var(--color-muted); margin-right: var(--space-1); }
-.newslettermodal__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
-.newslettermodal__legend { font-size: var(--text-s); color: var(--color-muted); }
-.newslettermodal__x0 { color: var(--color-ink); border-color: var(--color-muted); }
-.newslettermodal__t0 { font-size: var(--text-s); }
-.newslettermodal__layer0 { position: relative; z-index: 9999; }
-input.newslettermodal__field, select.newslettermodal__field, textarea.newslettermodal__field { font-size: 13px; }
-.newslettermodal__main { flex: 1; }
+
+.newslettermodal__close:hover { color: var(--color-ink); }
+.newslettermodal__close svg { height: 16px; stroke: currentColor; stroke-linecap: round; stroke-width: 1.6; width: 16px; }
+
+.newslettermodal__form,
+.newslettermodal__done { display: grid; gap: var(--space-4); }
+
+.newslettermodal__title { font-size: var(--text-xl); }
+
+.newslettermodal__copy { color: var(--color-ink-soft); font-size: var(--text-s); }
+
+.newslettermodal__done .btn { justify-self: start; }

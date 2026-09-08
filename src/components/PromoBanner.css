@@ -1,48 +1,49 @@
 .promobanner {
-  background: var(--color-surface);
-  border-radius: var(--radius-m);
-  box-shadow: var(--shadow-card);
-  padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-.promobanner__title { font-size: var(--text-l); margin: 0; }
-.promobanner__copy { color: var(--color-muted); margin: 0; }
-.promobanner__cta, .promobanner__go {
-  align-self: flex-start;
-  background: var(--color-accent);
+  align-items: center;
+  background: var(--color-ink);
   color: var(--color-accent-ink);
-  border: none;
-  border-radius: var(--radius-s);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-m);
-  cursor: pointer;
+  display: flex;
+  font-size: var(--text-s);
+  gap: var(--space-4);
+  justify-content: center;
+  padding: var(--space-3) var(--space-5);
+  position: relative;
+  text-align: center;
 }
-.promobanner__input {
-  border: 1px solid var(--color-muted);
+
+.promobanner__message { align-items: center; display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+
+.promobanner__code {
+  border: var(--border-hairline) dashed rgba(255, 255, 255, .45);
   border-radius: var(--radius-s);
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--text-m);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: var(--text-xs);
+  letter-spacing: .08em;
+  padding: 2px var(--space-2);
 }
-.promobanner__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-1); }
-.promobanner__label { font-size: var(--text-s); color: var(--color-muted); }
-.promobanner__chip { color: var(--color-accent); cursor: pointer; }
-.promobanner__badge { font-size: var(--text-s); color: var(--color-accent); border: 1px solid var(--color-accent); border-radius: var(--radius-s); padding: 0 var(--space-1); }
-.promobanner__head, .promobanner__actions, .promobanner__rowline, .promobanner__row { display: flex; gap: var(--space-2); align-items: center; }
-.promobanner__media { height: 96px; border-radius: var(--radius-s); background: var(--color-bg); }
-.promobanner__fine, .promobanner__hint, .promobanner__detail { font-size: var(--text-s); color: var(--color-muted); margin: 0; }
-.promobanner__toggle { background: none; border: none; color: var(--color-accent); padding: 0; cursor: pointer; align-self: flex-start; }
-.promobanner__index { color: var(--color-muted); margin-right: var(--space-1); }
-.promobanner__set { border: 1px solid var(--color-muted); border-radius: var(--radius-s); padding: var(--space-3); }
-.promobanner__legend { font-size: var(--text-s); color: var(--color-muted); }
-.promobanner__m0 { padding: var(--space-4) var(--space-2); margin-bottom: var(--space-4); }
-/* carried over from the promo variant */
-.promobanner__panel { background: var(--color-muted); border-radius: 6px; padding: var(--space-4); box-shadow: 0 1px 3px rgba(30,25,20,.12); }
-.promobanner__panel-alt { background: var(--color-muted); border-radius: 6px; padding: var(--space-4); box-shadow: 0 1px 3px rgba(30,25,20,.12); }
-.promobanner__t0 { font-size: var(--text-s); }
-.promobanner__c0 { color: var(--color-muted); }
-.promobanner__outer { display: flex; }
-.promobanner__outer > .promobanner__inner { display: flex; }
-@keyframes promobanner-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.promobanner__ticker { animation: promobanner-ticker 12s linear infinite; }
+
+.promobanner__details { color: inherit; text-underline-offset: 3px; }
+.promobanner__details:hover { color: var(--color-accent); }
+
+.promobanner__dismiss {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  display: grid;
+  opacity: .7;
+  padding: var(--space-2);
+  place-items: center;
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity var(--motion-fast) var(--motion-ease);
+}
+
+.promobanner__dismiss:hover { opacity: 1; }
+.promobanner__dismiss svg { height: 14px; stroke: currentColor; stroke-linecap: round; stroke-width: 1.6; width: 14px; }
+
+@media (max-width: 720px) {
+  .promobanner { padding-right: var(--space-8); }
+  .promobanner__details { display: none; }
+}

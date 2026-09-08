@@ -1,17 +1,36 @@
-import { useState } from 'react';
 import './SearchBar.css';
 
-interface SearchBarProps { onSubmit?: (value: string) => void; }
+interface SearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+  resultCount: number;
+}
 
-export function SearchBar({}: SearchBarProps) {
-  const [value, setValue] = useState('');
+export function SearchBar({ value, onChange, resultCount }: SearchBarProps) {
   return (
-    <section className="searchbar" aria-label="Search Bar">
-      <div className="searchbar__rowline">
-        <input aria-label="Search Bar" aria-describedby="searchbar-hint" className="searchbar__input" value={value} onChange={(e) => setValue(e.target.value)} />
-        <button className="searchbar__go" type="button">Go</button>
-      </div>
-      <p id="searchbar-hint" className="searchbar__hint">Press enter to apply.</p>
-    </section>
+    <div className="searchbar">
+      <label className="searchbar__field">
+        <span className="visually-hidden">Search products</span>
+        <svg className="searchbar__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="16.5" y1="16.5" x2="21" y2="21" />
+        </svg>
+        <input
+          className="input searchbar__input"
+          type="search"
+          placeholder="Search the shop"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+        />
+      </label>
+      {value.trim() !== '' && (
+        <button className="link searchbar__clear" type="button" onClick={() => onChange('')}>
+          Clear
+        </button>
+      )}
+      <p className="searchbar__status" role="status">
+        {resultCount} {resultCount === 1 ? 'item' : 'items'}
+      </p>
+    </div>
   );
 }
