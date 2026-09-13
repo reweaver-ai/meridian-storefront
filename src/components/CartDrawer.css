@@ -45,7 +45,8 @@
 .cartdrawer__close:hover { color: var(--color-ink); }
 .cartdrawer__close svg { height: 16px; stroke: currentColor; stroke-linecap: round; stroke-width: 1.6; width: 16px; }
 
-.cartdrawer__body { flex: 1; overflow-y: auto; padding: var(--space-5); }
+.cartdrawer__body {
+  min-width: 0; flex: 1; overflow-y: auto; padding: var(--space-5); }
 
 .cartdrawer__empty {
   display: grid;
