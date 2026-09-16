@@ -30,16 +30,44 @@ const CFG = {
   l2: { hexes: 2, magics: 2, todos: 1, logs: 1, inline: 1, anyProps: 1, divClick: 1, emptyCatch: 1, fallback: 1,
         fontsCss: 2, fontsJsx: 1, lineHeights: 1, namedColors: 1, zIndex: 1, mixedUnits: 1, gaps: 1,
         headingJump: 1, touchTarget: 1, mobileZoom: 1,
-        eslintDisable: 1, aiComments: 1, consoleError: 1, catchWarn: 1, nonNull: 1, unsafeCast: 1 },
-  l3: { hexes: 4, magics: 3, todos: 2, logs: 2, inline: 2, anyProps: 2, divClick: 2, emptyCatch: 1, dead: 1,
+        eslintDisable: 1, aiComments: 1, consoleError: 1, catchWarn: 1, nonNull: 1, unsafeCast: 1,
+        stockFetch: 1, unlabeledInput: 1, styleZ: 1, styleFont: 1, flexGrow: 1, prefsParse: 1, splice: 1,
+        sampleEmail: 1 },
+  l3: { hexes: 4, magics: 3, todos: 2, logs: 6, inline: 2, anyProps: 2, divClick: 2, emptyCatch: 1, dead: 1,
         fallback: 1, danger: 1, interval: 1, hack: 1, dupe: 1, outline: 1, mock: 1,
         fontsCss: 4, fontsJsx: 2, lineHeights: 2, namedColors: 2, zIndex: 2, mixedUnits: 2, gaps: 2,
         nestedFlex: 1, important: 1, fullWidthBtn: 1,
         headingJump: 1, touchTarget: 1, mobileZoom: 1,
         eslintDisable: 2, aiComments: 2, overDefensive: 1, nocheck: 1,
         consoleError: 1, catchWarn: 1, fireForget: 1, successFalse: 1,
-        nonNull: 2, unsafeCast: 2, doubleCast: 1, globalState: 1 },
+        nonNull: 2, unsafeCast: 2, doubleCast: 1, globalState: 1,
+        stockFetch: 1, unlabeledInput: 1, styleZ: 1, styleFont: 1, flexGrow: 1, prefsParse: 1, splice: 1,
+        sampleEmail: 1,
+        fixedWidth: 1, rgbBadge: 1, stateMutation: 1, embedMessage: 1, sampleOffers: 1, trailFilm: 1,
+        dupTermsId: 1, customRole: 1, giftWrapToggle: 1, loadingText: 1, sizeTable: 1, iconDismiss: 1,
+        removeSaved: 1, ticker: 1, railMinWidth: 1 },
 };
+
+/* ── WHY THE THIRD WAVE ──────────────────────────────────────────────────────
+ *
+ * Recalibrated 2026-09-16 against production's seal (Cloud Run revision
+ * drift-detector-00336, 137 shipped rules). The fixture had fallen to a HEAD of
+ * 0.14 and a peak below High: 26 of 137 shipped rules fired anywhere in the
+ * history, and the costing basis batches repeat findings, so the first two
+ * waves' token patterns (hex, spacing, font size — hundreds of findings) price
+ * at about a minute each. Density does not move PDR any more; RULE BREADTH per
+ * file does.
+ *
+ * So each knob here exists because a shipped rule had nothing to find, and
+ * each is written against that rule's reviewed definition
+ * (engine-gate/reviews/<rule>.json in drift-detector) so the firing is a true
+ * positive, not a detector quirk. They are still things a storefront acquires
+ * under campaign pressure: a size-guide table with no caption, an embedded
+ * trail film with no title, a stock fetch in the render body, a quantity box
+ * with no label, a checkout embed that posts to '*'.
+ *
+ * Plain CSS stays plain: nothing here introduces Tailwind to reach a rule.
+ */
 
 /* ── WHY THE SECOND WAVE OF KNOBS ───────────────────────────────────────────
  *
@@ -313,7 +341,9 @@ function tsxDrift(name, level, seed) {
     hooks += `  const ref${i} = (window as any).__meridian!.registry!.${name.toLowerCase()}!;\n`;
   }
   for (let i = 0; i < (c.unsafeCast ?? 0); i++) {
-    hooks += `  const cast${i} = window.localStorage.getItem('${name.toLowerCase()}') as ${name}Props;\n`;
+    // JSON.parse, so the assertion is unvalidated but still compiles — a raw
+    // string cast to a props type is a TS2352 error, and HEAD must typecheck.
+    hooks += `  const cast${i} = JSON.parse(window.localStorage.getItem('${name.toLowerCase()}') ?? '{}') as ${name}Props;\n`;
   }
   if (c.doubleCast) {
     hooks += `  const raw = window.history.state as unknown as ${name}Props;\n`;
@@ -326,7 +356,78 @@ function tsxDrift(name, level, seed) {
   if (c.headingJump) {
     jsx += `      <h1 className="${name.toLowerCase()}__lede">${name}</h1>\n      <h4 className="${name.toLowerCase()}__sub">What's inside</h4>\n`;
   }
-  return { top, pre, hooks, jsx, props, needsEffect: Boolean(c.hack || c.interval) };
+
+  // ── the third wave ───────────────────────────────────────────────────────
+  const n = name.toLowerCase();
+  // api-call-in-render: the stock check runs on every render.
+  if (c.stockFetch) hooks += `  const stock = fetch('/api/stock?surface=${n}');\n`;
+  // missing-label + font-size-mobile-zoom: a quantity box with no name and a
+  // 13px font, so iOS zooms on focus.
+  if (c.unlabeledInput) jsx += `      <input className="${n}__qty" type="number" style={{ fontSize: 13 }} defaultValue={1} />\n`;
+  if (c.styleZ) jsx += `      <div className="${n}__sticker" style={{ zIndex: ${40 + (seed % 7)} }}>Sale</div>\n`;
+  if (c.styleFont) jsx += `      <p className="${n}__legal" style={{ fontSize: '${10 + (seed % 3)}px' }}>Exclusions apply.</p>\n`;
+  // json-parse-no-recovery: a corrupt preference blob silently becomes {}.
+  if (c.prefsParse) {
+    pre += `function read${name}Prefs() {\n  try {\n    return JSON.parse(window.localStorage.getItem('${n}-prefs') ?? '{}');\n  } catch (e) {\n    return {};\n  }\n}\n`;
+    hooks += `  const prefs = read${name}Prefs();\n`;
+  }
+  if (c.splice) hooks += `  const featured = ['trail', 'city', 'camp'];\n  featured.splice(0, 1);\n`;
+  // hardcoded-sample-data: the designer's placeholder address shipped.
+  if (c.sampleEmail) jsx += `      <input className="${n}__email" type="email" aria-label="Email for restock alerts" placeholder="jane@example.com" />\n`;
+  // dimension-fixed-large: a rail sized for the campaign art, not the viewport.
+  if (c.fixedWidth) jsx += `      <div className="${n}__art" style={{ width: '${640 + seed}px' }} aria-hidden="true" />\n`;
+  // color-jsx-rgb
+  if (c.rgbBadge) jsx += `      <span className="${n}__limited" style={{ backgroundColor: 'rgba(193, 95, 30, 0.${12 + (seed % 7)})' }}>Limited</span>\n`;
+  // direct-state-mutation: a view counter bumped in place.
+  if (c.stateMutation) hooks += `  const [state, setState] = useState({ views: 0 });\n  state.views += 1;\n`;
+  // security-postmessage-wildcard-origin: the checkout embed tells its parent, whoever that is.
+  if (c.embedMessage) hooks += `  window.parent.postMessage({ type: '${n}-viewed' }, '*');\n`;
+  // mock-data-in-production
+  if (c.sampleOffers) {
+    pre += `function load${name}Offers() {\n  const sampleData = [{ id: 'o1', label: 'Free shipping over $50' }];\n  return sampleData;\n}\n`;
+    hooks += `  const offers = load${name}Offers();\n`;
+  }
+  // iframe-missing-title
+  if (c.trailFilm) jsx += `      <iframe src="https://www.youtube-nocookie.com/embed/meridian-${n}" width="560" height="315" />\n`;
+  // duplicate-aria-reference-id: the terms blurb pasted twice, both with the id the button points at.
+  if (c.dupTermsId) {
+    jsx += `      <p id="${n}-terms" className="${n}__terms">Offer ends Sunday.</p>\n`
+      + `      <button type="button" className="${n}__claim" aria-describedby="${n}-terms">Claim offer</button>\n`
+      + `      <p id="${n}-terms" className="${n}__terms">Offer ends Sunday.</p>\n`;
+  }
+  // aria-role-invalid: a role invented to hook analytics.
+  if (c.customRole) jsx += `      <div role="promo" className="${n}__slot">Seasonal pick</div>\n`;
+  // aria-required-attr-missing: a checkbox role with no aria-checked.
+  if (c.giftWrapToggle) jsx += `      <span role="checkbox" tabIndex={0} className="${n}__wrap" onClick={() => console.log('gift wrap')}>Gift wrap</span>\n`;
+  // missing-skeleton-ui
+  if (c.loadingText) {
+    hooks += `  const isLoading = window.localStorage.getItem('${n}-offers') === null;\n`;
+    jsx += `      {isLoading && <p>Loading offers…</p>}\n`;
+  }
+  // table-semantics: the size guide has headers and no caption.
+  if (c.sizeTable) {
+    jsx += `      <table className="${n}__sizes">\n        <thead>\n          <tr><th>Size</th><th>Chest</th></tr>\n        </thead>\n        <tbody>\n          <tr><td>M</td><td>38–40</td></tr>\n        </tbody>\n      </table>\n`;
+  }
+  // icon-only-action
+  if (c.iconDismiss) {
+    jsx += `      <button type="button" className="${n}__dismiss" onClick={() => console.log('dismiss')}>\n        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1L1 11" /></svg>\n      </button>\n`;
+  }
+  // action-no-undo
+  if (c.removeSaved) {
+    pre += `function removeSaved${name}() {\n  window.localStorage.removeItem('${n}-saved');\n}\n`;
+    jsx += `      <button type="button" className="${n}__remove" onClick={() => removeSaved${name}()}>Remove saved</button>\n`;
+  }
+
+  const react = [];
+  if (c.hack || c.interval) react.push('useEffect');
+  if (c.stateMutation) react.push('useState');
+  return { top, pre, hooks, jsx, props, react };
+}
+
+/** The react import a template needs: its own hooks plus whatever its drift added. */
+function reactImport(own, d) {
+  const names = [...new Set([...own, ...(d.react ?? [])])];
+  return names.length ? `import { ${names.join(', ')} } from 'react';\n` : '';
 }
 
 function cssDrift(name, level, seed) {
@@ -352,7 +453,9 @@ function cssDrift(name, level, seed) {
   for (let i = 0; i < (c.lineHeights ?? 0); i++) {
     out += `.${n}__lh${i} { line-height: ${20 + i * 2}px; }\n`;
   }
-  const NAMED = ['darkslategray', 'firebrick', 'goldenrod', 'steelblue'];
+  // Keywords, not the long names: a designer flags `orange`, and color-css-named
+  // reads exactly the short keyword set.
+  const NAMED = ['orange', 'black', 'white', 'red'];
   for (let i = 0; i < (c.namedColors ?? 0); i++) {
     out += `.${n}__c${i} { color: ${NAMED[(seed + i) % NAMED.length]}; }\n`;
   }
@@ -387,6 +490,14 @@ function cssDrift(name, level, seed) {
   if (c.fullWidthBtn) {
     out += `.${n}__cta { width: 100%; }\n`;
   }
+
+  // ── the third wave ───────────────────────────────────────────────────────
+  // flex-child-missing-min-width
+  if (c.flexGrow) out += `.${n}__main { flex: 1; }\n`;
+  // animation-unbounded-iteration: the urgency ticker never stops.
+  if (c.ticker) out += `@keyframes ${n}-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }\n.${n}__ticker { animation: ${n}-ticker 12s linear infinite; }\n`;
+  // horizontal-scroll-risk
+  if (c.railMinWidth) out += `.${n}__rail { min-width: ${680 + seed}px; }\n`;
   return out;
 }
 
@@ -510,8 +621,7 @@ ${empty}      <ol className="${n}__list">
     kind === 'form' ? `  const [value, setValue] = useState('');\n` : '',
     kind === 'tile' ? `  const [expanded, setExpanded] = useState(false);\n` : '',
   ].join('');
-  const reactImports = [needsState ? 'useState' : null, d.needsEffect ? 'useEffect' : null].filter(Boolean);
-  const importLine = reactImports.length ? `import { ${reactImports.join(', ')} } from 'react';\n` : '';
+  const importLine = reactImport(needsState ? ['useState'] : [], d);
 
   return `${d.top ?? ''}${importLine}import './${name}.css';
 
@@ -577,7 +687,7 @@ function productCard(level, seed) {
   const img = level >= 2
     ? `<img className="productcard__img" src={\`/img/\${product.id}.jpg\`} />`
     : `<img className="productcard__img" src={\`/img/\${product.id}.jpg\`} alt={product.name} />`;
-  return `import './ProductCard.css';
+  return `${reactImport([], d)}import './ProductCard.css';
 import type { Product } from '../data/products';
 import { money } from '../lib/format';
 
@@ -603,7 +713,7 @@ function reviewList(level, seed) {
   const body = level >= 3
     ? `<p className="reviewlist__body" dangerouslySetInnerHTML={{ __html: review.body }} />`
     : `<p className="reviewlist__body">{review.body}</p>`;
-  return `import './ReviewList.css';
+  return `${reactImport([], d)}import './ReviewList.css';
 
 ${d.pre}interface Review { id: string; author: string; body: string; stars: number; }
 
@@ -626,8 +736,7 @@ ${d.jsx}    </section>
 
 function checkoutForm(level, seed) {
   const d = tsxDrift('CheckoutForm', level, seed);
-  return `import { useState } from 'react';
-import './CheckoutForm.css';
+  return `${reactImport(['useState'], d)}import './CheckoutForm.css';
 import { money } from '../lib/format';
 
 ${d.pre}interface CheckoutFormProps { totalCents: number; onPlaceOrder: () => void; ${d.props} }
@@ -656,7 +765,7 @@ ${d.jsx}      <button className="checkoutform__submit" type="submit">Place order
 
 function navBar(level, seed) {
   const d = tsxDrift('NavBar', level, seed);
-  return `import './NavBar.css';
+  return `${reactImport([], d)}import './NavBar.css';
 
 ${d.pre}interface NavBarProps { cartCount: number; onOpenCart: () => void; ${d.props} }
 
@@ -680,7 +789,7 @@ ${d.jsx}      <button className="navbar__cart" type="button" onClick={onOpenCart
 
 function cartDrawer(level, seed) {
   const d = tsxDrift('CartDrawer', level, seed);
-  return `import './CartDrawer.css';
+  return `${reactImport([], d)}import './CartDrawer.css';
 import type { Product } from '../data/products';
 import { money } from '../lib/format';
 
@@ -1198,14 +1307,14 @@ const PLAN = [
   // Phase B — growth, first drift. Target: Low → Moderate entry (0.15 → 0.32).
   { d: '2024-01-09', m: 'feat: search bar', ops: [['add', 'SearchBar', 'form', 1]] },
   { d: '2024-02-06', m: 'feat: category tiles on the landing page', ops: [['add', 'CategoryTile', 'tile', 1]] },
-  { d: '2024-03-05', m: 'feat: price tag component with sale styling', ops: [['add', 'PriceTag', 'tile', 1]] },
+  { d: '2024-03-05', m: 'feat: price tag component with sale styling', ops: [['add', 'PriceTag', 'tile', 2]] },
   { d: '2024-04-09', m: 'fix: cart badge spacing on narrow screens', ops: [['level', 'NavBar', 1]] },
   { d: '2024-05-07', m: 'feat: rating stars on product cards', ops: [['add', 'RatingStars', 'tile', 1]] },
   { d: '2024-06-11', m: 'feat: quantity stepper in the cart', ops: [['add', 'QuantityStepper', 'form', 2]] },
   { d: '2024-07-09', m: 'feat: order summary panel', ops: [['add', 'OrderSummary', 'list', 2]] },
   { d: '2024-08-13', m: 'fix: ship checkout tweaks from the promo sprint', ops: [['level', 'CheckoutForm', 1]] },
 
-  // Phase C — velocity spike. Target: climb 0.45 → 0.85 and hold.
+  // Phase C — velocity spike. Target: climb through High to a peak just inside Severe.
   { d: '2024-09-10', m: 'feat: promo banner variants for the flash campaign', ops: [['add', 'PromoBanner', 'tile', 3]] },
   { d: '2024-09-24', m: 'feat: checkout API — order placement and lookup', ops: [['api', 2]] },
   { d: '2024-10-01', m: 'feat: flash sale rail (shipped same day)', ops: [['add', 'FlashSale', 'tile', 3]] },
@@ -1216,36 +1325,42 @@ const PLAN = [
   { d: '2025-02-11', m: 'feat: shipping estimator (ported from the promo repo)', ops: [['add', 'ShippingEstimate', 'form', 2]] },
   { d: '2025-03-11', m: 'feat: rich review bodies with markup support', ops: [['level', 'ReviewList', 3]] },
   { d: '2025-04-15', m: 'feat: express checkout experiments', ops: [['level', 'CheckoutForm', 3], ['api', 3]] },
-  { d: '2025-05-13', m: 'feat: loyalty widget + drawer upsells', ops: [['add', 'LoyaltyWidget', 'tile', 3], ['level', 'CartDrawer', 2]] },
+  { d: '2025-05-13', m: 'feat: loyalty widget + drawer upsells', ops: [['add', 'LoyaltyWidget', 'tile', 2], ['level', 'CartDrawer', 2]] },
   { d: '2025-06-10', m: 'fix: hotfixes for the summer sale traffic', ops: [['reseed', 'PromoBanner'], ['reseed', 'FlashSale']] },
 
-  // Phase D — remediation sprint. Target: fall to ~0.40 and hold.
-  { d: '2025-07-15', m: 'refactor: return checkout + reviews to the token system, drop dead code', ops: [['level', 'CheckoutForm', 0], ['level', 'ReviewList', 0]] },
-  { d: '2025-07-29', m: 'fix(security): parameterize order queries, move the signing key to the environment', ops: [['api', 0]] },
-  { d: '2025-08-05', m: 'refactor: promo surfaces back on tokens; remove urgency copy', ops: [['level', 'PromoBanner', 1], ['level', 'FlashSale', 1], ['level', 'NewsletterModal', 1]] },
-  { d: '2025-09-02', m: 'refactor: card + drawer cleanup, restore alt text and button semantics', ops: [['level', 'ProductCard', 0], ['level', 'CartDrawer', 0]] },
-  { d: '2025-10-07', m: 'refactor: coupon + shipping estimate typed and tokenized', ops: [['level', 'CouponField', 0], ['level', 'ShippingEstimate', 1], ['level', 'WishlistButton', 1]] },
-  { d: '2025-11-04', m: 'chore: sweep remaining console noise from the sale sprint', ops: [['level', 'RecommendationRail', 1], ['level', 'LoyaltyWidget', 1], ['level', 'QuantityStepper', 1], ['level', 'OrderSummary', 1]] },
-  { d: '2025-11-18', m: 'chore: close out the sprint — nav, search, tiles and ratings back on tokens', ops: [['level', 'NavBar', 0], ['level', 'SearchBar', 0], ['level', 'CategoryTile', 0], ['level', 'PriceTag', 0], ['level', 'RatingStars', 0], ['tests', 'green']] },
-
-  // Phase E — creep. Target: rise to ~0.60 by the end.
+  // Phase D — remediation sprint. Two large commits, not seven small ones.
   //
-  // THE TAIL NOW REACHES LEVEL 3, and it has to. Every level-3 pattern — the
+  // The hosted chart samples ~10 commits evenly across the log (44 commits →
+  // indexes 0, 5, 10, 14, 19, 24, 29, 33, 38, 43). A sprint spread over seven
+  // commits put sample 7 mid-cleanup, still at the peak, so the dip the whole
+  // story turns on never appeared on the default chart. The sprint now lands
+  // by index 29. Target at sample 7: ~0.30.
+  { d: '2025-07-15', m: 'refactor: remediation sprint — checkout, reviews, promo surfaces, card and drawer back on tokens', ops: [['level', 'CheckoutForm', 0], ['level', 'ReviewList', 0], ['level', 'PromoBanner', 1], ['level', 'FlashSale', 1], ['level', 'NewsletterModal', 1], ['level', 'ProductCard', 0], ['level', 'CartDrawer', 0]] },
+  { d: '2025-07-29', m: 'fix(security): parameterize order queries, move the signing key to the environment; coupon + shipping typed', ops: [['api', 0], ['level', 'CouponField', 0], ['level', 'ShippingEstimate', 1], ['level', 'WishlistButton', 1], ['level', 'RecommendationRail', 1]] },
+
+  // Phase E — creep. Target: back into High by the end, below the peak.
+  //
+  // THE TAIL REACHES LEVEL 3, and it has to. Every level-3 pattern — the
   // module-level cache, @ts-nocheck, !important, the over-defensive guard pile,
   // the fire-and-forget fetch — was unreachable at HEAD when the creep stopped
   // at 2, so the fixture's final state exercised barely a third of the shipped
-  // rules. Four surfaces regress hard here rather than every surface drifting a
+  // rules. A few surfaces regress hard here rather than every surface drifting a
   // little: campaign work and experiments are where a real storefront takes on
   // its worst code, and concentrating it keeps the rest of the tree honest.
+  { d: '2025-08-12', m: 'chore: close out the sprint — nav, search, tiles and ratings back on tokens', ops: [['level', 'NavBar', 0], ['level', 'SearchBar', 0], ['level', 'CategoryTile', 0], ['level', 'PriceTag', 0], ['level', 'RatingStars', 0], ['tests', 'green']] },
+  { d: '2025-09-09', m: 'feat: back-to-school bundle builder', ops: [['add', 'BundleBuilder', 'form', 1]] },
+  { d: '2025-10-14', m: 'feat: fall lookbook in the recommendation rail', ops: [['level', 'RecommendationRail', 2]] },
+  { d: '2025-11-04', m: 'feat: black friday countdown banner', ops: [['add', 'CountdownBanner', 'tile', 2]] },
+  { d: '2025-11-25', m: 'fix: black friday checkout hotfixes', ops: [['level', 'CheckoutForm', 1]] },
   { d: '2025-12-09', m: 'feat: gift card teaser for the holidays', ops: [['add', 'GiftCardTeaser', 'tile', 1]] },
   { d: '2026-01-13', m: 'feat: post-holiday clearance rail', ops: [['level', 'FlashSale', 3]] },
   { d: '2026-02-10', m: 'feat: saved-for-later section in the drawer', ops: [['level', 'CartDrawer', 2]] },
   { d: '2026-03-10', m: 'feat: spring campaign banners', ops: [['level', 'PromoBanner', 3]] },
   { d: '2026-04-14', m: 'feat: size guide popover on cards', ops: [['level', 'ProductCard', 2]] },
-  { d: '2026-05-12', m: 'feat: member pricing experiment', ops: [['level', 'LoyaltyWidget', 3], ['tests', 'skipped']] },
+  { d: '2026-05-12', m: 'feat: member pricing experiment', ops: [['tests', 'skipped']] },
   { d: '2026-06-09', m: 'feat: checkout trust badges from the conversion sprint', ops: [['level', 'CheckoutForm', 2], ['api', 2]] },
-  { d: '2026-07-14', m: 'feat: summer sale urgency banner', ops: [['reseed', 'NewsletterModal'], ['level', 'NewsletterModal', 3]] },
-  { d: '2026-08-11', m: 'feat: back-to-trail landing refresh', ops: [['level', 'Hero', 2], ['level', 'SearchBar', 2]] },
+  { d: '2026-07-14', m: 'feat: summer sale urgency banner', ops: [['reseed', 'NewsletterModal'], ['level', 'NewsletterModal', 2]] },
+  { d: '2026-08-11', m: 'feat: back-to-trail landing refresh', ops: [['level', 'Hero', 2]] },
 ];
 
 // ── execution ───────────────────────────────────────────────────────────────
