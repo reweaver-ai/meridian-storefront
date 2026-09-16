@@ -46,4 +46,5 @@
   --font-display: Georgia, "Iowan Old Style", "Times New Roman", serif;
 
   --z-header: 40; --z-drawer: 60; --z-modal: 80;
+--spacing-5: 5px;
 }
