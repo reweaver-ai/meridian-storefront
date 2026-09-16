@@ -5,26 +5,30 @@ against the real scan engine so the Production Drift Rating sweeps the bands:
 Minimal start, a Severe peak, a remediation dip into Low, and a creep back into
 High that ends below the peak.
 
-Last calibrated 2026-09-16 against production's seal (Cloud Run revision
+Last calibrated 2026-09-16 against **tray build 79's costing** — every finding
+charged the flat fix-minutes of its severity (95/28/12), no repeat batching —
+which is what users see in build 79 and what the hosted engine reports from
+reweaver-ai#3518 on. Findings came from production's seal (Cloud Run revision
 `drift-detector-00336`, 137 shipped rules). The hosted chart's default view
 samples 10 commits evenly across the 44 (indexes 0, 5, 10, 14, 19, 24, 29, 33,
 38, 43), and the plan is shaped for those points:
 
 | sample | commit | PDR |
 |---|---|---|
-| 0  | 2023-05-16 scaffold | 0.04 Minimal |
-| 5  | 2023-09-05 checkout form | 0.08 Minimal |
-| 10 | 2024-03-05 price tag | 0.20 Low |
-| 14 | 2024-07-09 order summary | 0.35 Moderate |
-| 19 | 2024-10-22 recommendation rail | 0.64 High |
+| 0  | 2023-05-16 scaffold | 0.03 Minimal |
+| 5  | 2023-09-05 checkout form | 0.09 Minimal |
+| 10 | 2024-03-05 price tag | 0.27 Low |
+| 14 | 2024-07-09 order summary | 0.44 Moderate |
+| 19 | 2024-10-22 recommendation rail | 0.62 High |
 | 24 | 2025-03-11 rich review bodies | 0.77 Severe — peak |
-| 29 | 2025-07-29 security fix, sprint ends | 0.30 Low — dip |
+| 29 | 2025-07-29 security fix, sprint ends | 0.28 Low — dip |
 | 33 | 2025-11-04 black friday countdown | 0.31 Moderate |
-| 38 | 2026-03-10 spring campaign banners | 0.57 High |
-| 43 | 2026-08-11 landing refresh (HEAD) | 0.67 High |
+| 38 | 2026-03-10 spring campaign banners | 0.55 High |
+| 43 | 2026-08-11 landing refresh (HEAD) | 0.63 High |
 
-Between samples the plateau reaches 0.83 (2025-04/05); a narrowed chart range
-shows it. HEAD: 138 drift-hours, 52 shipped rules firing, 63 files.
+Between samples the plateau reaches 0.84 (2025-05/06) and the sprint bottoms
+at 0.17 (2025-08-12); a narrowed chart range shows both. HEAD: 126
+drift-hours, 44 shipped rules firing, 63 files.
 
 The tree carries a **checkout API** (`server/api/`) as well as the React app,
 because almost nothing in the Security dimension is a client-side pattern and a
@@ -45,14 +49,18 @@ The final tree typechecks (`tsc --noEmit` with the package's devDependencies
 installed); historical peak states are for scanning, not building.
 
 Calibration notes:
-- **Rule breadth moves PDR, density does not.** The costing basis batches
-  repeat findings, so hundreds of hex/spacing/font-size findings price at about
-  a minute each. Each distinct shipped rule firing in a file prices near its
-  full severity weight. The third wave of knobs in `CFG` exists for that
-  reason, each written against the rule's reviewed definition
-  (`engine-gate/reviews/<rule>.json` in drift-detector).
-- **Level 3 is heavy.** One surface moving 3 → 2 moves PDR by ~0.15 at the
-  dip; tune the tail and the sprint one level at a time.
+- **Every finding is charged in full.** Under build 79's costing a file's cost
+  is its finding count times severity minutes, so a level-2 file carrying
+  every level-2 pattern cost 6-8 drift-hours against a 2-hour budget and the
+  history saturated at 0.99. `patternsFor` gives each drifted file one rotating
+  slice of its level's patterns (`SHARE`), keeping rule breadth across the
+  tree while one file costs about 1/SHARE of its level. Tune `SHARE` first
+  when the costing changes.
+- The third wave of knobs in `CFG` exists because 26 of 137 shipped rules
+  fired anywhere in the history; each is written against the rule's reviewed
+  definition (`engine-gate/reviews/<rule>.json` in drift-detector).
+- **Level 3 is heavy.** Tune the tail and the sprint one level
+  at a time and re-score the sampled commits.
 - **Shape the plan for the sampled indexes.** Adding or removing a commit
   shifts every sample. Keep the count at 44, or recompute the indexes
   (`sampleCommits` in drift-detector's `server/scan-handler.mjs`; a repo this
@@ -67,4 +75,5 @@ Calibration notes:
   touch-target-too-small. This is a plain-CSS storefront; introducing Tailwind
   to satisfy a detector would make the fixture a fiction.
 - **Calibrated against a moving target.** The ship list is still being tuned;
-  re-score the sampled commits after a reseal and check which rules went quiet.
+  re-score the sampled commits after a reseal or a costing change (build 81
+  prices per detector) and check which rules went quiet.

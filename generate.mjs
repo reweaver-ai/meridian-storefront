@@ -27,20 +27,20 @@ if (!TARGET) { console.error('usage: node generate.mjs <target-dir>'); process.e
 // calibration loop should need to touch.
 const CFG = {
   l1: { hexes: 1, magics: 1, todos: 1, fontsCss: 1 },
-  l2: { hexes: 2, magics: 2, todos: 1, logs: 1, inline: 1, anyProps: 1, divClick: 1, emptyCatch: 1, fallback: 1,
-        fontsCss: 2, fontsJsx: 1, lineHeights: 1, namedColors: 1, zIndex: 1, mixedUnits: 1, gaps: 1,
+  l2: { hexes: 1, magics: 1, todos: 1, logs: 1, inline: 1, anyProps: 1, divClick: 1, emptyCatch: 1, fallback: 1,
+        fontsCss: 1, lineHeights: 1, namedColors: 1, zIndex: 1,
         headingJump: 1, touchTarget: 1, mobileZoom: 1,
-        eslintDisable: 1, aiComments: 1, consoleError: 1, catchWarn: 1, nonNull: 1, unsafeCast: 1,
+        eslintDisable: 1, aiComments: 1, consoleError: 1, unsafeCast: 1,
         stockFetch: 1, unlabeledInput: 1, styleZ: 1, styleFont: 1, flexGrow: 1, prefsParse: 1, splice: 1,
         sampleEmail: 1 },
-  l3: { hexes: 4, magics: 3, todos: 2, logs: 6, inline: 2, anyProps: 2, divClick: 2, emptyCatch: 1, dead: 1,
+  l3: { hexes: 1, magics: 1, todos: 2, logs: 6, inline: 1, anyProps: 2, divClick: 1, emptyCatch: 1, dead: 1,
         fallback: 1, danger: 1, interval: 1, hack: 1, dupe: 1, outline: 1, mock: 1,
-        fontsCss: 4, fontsJsx: 2, lineHeights: 2, namedColors: 2, zIndex: 2, mixedUnits: 2, gaps: 2,
+        fontsCss: 1, fontsJsx: 1, lineHeights: 1, namedColors: 1, zIndex: 1, mixedUnits: 1,
         nestedFlex: 1, important: 1, fullWidthBtn: 1,
         headingJump: 1, touchTarget: 1, mobileZoom: 1,
-        eslintDisable: 2, aiComments: 2, overDefensive: 1, nocheck: 1,
+        eslintDisable: 1, aiComments: 1, overDefensive: 1, nocheck: 1,
         consoleError: 1, catchWarn: 1, fireForget: 1, successFalse: 1,
-        nonNull: 2, unsafeCast: 2, doubleCast: 1, globalState: 1,
+        nonNull: 1, unsafeCast: 1, doubleCast: 1, globalState: 1,
         stockFetch: 1, unlabeledInput: 1, styleZ: 1, styleFont: 1, flexGrow: 1, prefsParse: 1, splice: 1,
         sampleEmail: 1,
         fixedWidth: 1, rgbBadge: 1, stateMutation: 1, embedMessage: 1, sampleOffers: 1, trailFilm: 1,
@@ -264,8 +264,28 @@ export const PRODUCTS: Product[] = [
 /** camelCase identifier from a component name — module-level symbols need one. */
 const n0 = (name) => name.charAt(0).toLowerCase() + name.slice(1);
 
+/* ── ONE FILE CARRIES A SHARE OF ITS LEVEL, NOT ALL OF IT ────────────────────
+ *
+ * Tray build 79 — and the hosted engine since #3518 — charges every finding the
+ * flat fix-minutes of its severity, with no discount for repeats. Under that
+ * costing a level-2 file carrying every level-2 pattern cost 6–8 drift-hours
+ * against a 2-hour per-file budget, and the whole history saturated at 0.99.
+ *
+ * So each drifted file carries one of SHARE rotating slices of its level's
+ * patterns, chosen by its seed. Across the tree every pattern still appears —
+ * rule breadth is unchanged — while one file's cost is about 1/SHARE of the
+ * level. Deterministic: the same seed always takes the same slice.
+ */
+const SHARE = 3;
+function patternsFor(level, seed) {
+  const all = level >= 3 ? CFG.l3 : level === 2 ? CFG.l2 : level === 1 ? CFG.l1 : null;
+  if (!all) return null;
+  const slice = (seed / 3) % SHARE;
+  return Object.fromEntries(Object.entries(all).filter((_, i) => i % SHARE === slice));
+}
+
 function tsxDrift(name, level, seed) {
-  const c = level >= 3 ? CFG.l3 : level === 2 ? CFG.l2 : level === 1 ? CFG.l1 : null;
+  const c = patternsFor(level, seed);
   if (!c) return { pre: '', hooks: '', jsx: '', props: '' };
   let pre = '', hooks = '', jsx = '', props = '';
   for (let i = 0; i < (c.logs ?? 0); i++) pre += `console.log('${name}: render pass ${i}');\n`;
@@ -326,7 +346,7 @@ function tsxDrift(name, level, seed) {
           `  if (input === null || input === undefined) return null; // guard ${i}`).join('\n')
       + `\n  return input;\n}\n`;
   }
-  if (c.consoleError) hooks += `  if (!label) console.error('${name}: missing label');\n`;
+  if (c.consoleError) hooks += `  const heading = '${name}';\n  if (!heading) console.error('${name}: missing heading');\n`;
   if (c.catchWarn) {
     hooks += `  try {\n    JSON.parse(window.localStorage.getItem('${name.toLowerCase()}-state') ?? '{}');\n  } catch (err) {\n    console.warn('${name}: bad cached state', err);\n  }\n`;
   }
@@ -431,7 +451,7 @@ function reactImport(own, d) {
 }
 
 function cssDrift(name, level, seed) {
-  const c = level >= 3 ? CFG.l3 : level === 2 ? CFG.l2 : level === 1 ? CFG.l1 : null;
+  const c = patternsFor(level, seed);
   if (!c) return '';
   let out = '';
   const n = name.toLowerCase();
@@ -1336,7 +1356,7 @@ const PLAN = [
   // story turns on never appeared on the default chart. The sprint now lands
   // by index 29. Target at sample 7: ~0.30.
   { d: '2025-07-15', m: 'refactor: remediation sprint — checkout, reviews, promo surfaces, card and drawer back on tokens', ops: [['level', 'CheckoutForm', 0], ['level', 'ReviewList', 0], ['level', 'PromoBanner', 1], ['level', 'FlashSale', 1], ['level', 'NewsletterModal', 1], ['level', 'ProductCard', 0], ['level', 'CartDrawer', 0]] },
-  { d: '2025-07-29', m: 'fix(security): parameterize order queries, move the signing key to the environment; coupon + shipping typed', ops: [['api', 0], ['level', 'CouponField', 0], ['level', 'ShippingEstimate', 1], ['level', 'WishlistButton', 1], ['level', 'RecommendationRail', 1]] },
+  { d: '2025-07-29', m: 'fix(security): parameterize order queries, move the signing key to the environment; coupon + shipping typed', ops: [['api', 0], ['level', 'CouponField', 0], ['level', 'ShippingEstimate', 1], ['level', 'WishlistButton', 1], ['level', 'RecommendationRail', 1], ['level', 'QuantityStepper', 1], ['level', 'OrderSummary', 1], ['level', 'LoyaltyWidget', 1]] },
 
   // Phase E — creep. Target: back into High by the end, below the peak.
   //
@@ -1358,7 +1378,7 @@ const PLAN = [
   { d: '2026-03-10', m: 'feat: spring campaign banners', ops: [['level', 'PromoBanner', 3]] },
   { d: '2026-04-14', m: 'feat: size guide popover on cards', ops: [['level', 'ProductCard', 2]] },
   { d: '2026-05-12', m: 'feat: member pricing experiment', ops: [['tests', 'skipped']] },
-  { d: '2026-06-09', m: 'feat: checkout trust badges from the conversion sprint', ops: [['level', 'CheckoutForm', 2], ['api', 2]] },
+  { d: '2026-06-09', m: 'feat: checkout trust badges from the conversion sprint', ops: [['api', 2]] },
   { d: '2026-07-14', m: 'feat: summer sale urgency banner', ops: [['reseed', 'NewsletterModal'], ['level', 'NewsletterModal', 2]] },
   { d: '2026-08-11', m: 'feat: back-to-trail landing refresh', ops: [['level', 'Hero', 2]] },
 ];
