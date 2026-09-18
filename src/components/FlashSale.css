@@ -1,53 +1,53 @@
 .flashsale {
-  background: var(--color-accent-wash);
-  border-block: var(--border-hairline) solid var(--color-line);
+  background: #fbf0e6;
+  border-block: 1px solid #e3dcd2;
 }
 
 .flashsale__inner {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-6);
+  gap: 32px;
   justify-content: space-between;
-  padding-block: var(--space-6);
+  padding-block: 32px;
 }
 
-.flashsale__eyebrow { margin-bottom: var(--space-1); }
+.flashsale__eyebrow { margin-bottom: 4px; }
 
-.flashsale__headline { font-size: var(--text-xl); }
+.flashsale__headline { font-size: 24px; }
 
-.flashsale__copy { color: var(--color-ink-soft); margin-top: var(--space-2); max-width: 52ch; }
+.flashsale__copy { color: #4a453e; margin-top: 8px; max-width: 52ch; }
 
-.flashsale__timer { align-items: center; display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.flashsale__timer { align-items: center; display: flex; flex-wrap: wrap; gap: 16px; }
 
 .flashsale__timer-label {
-  color: var(--color-muted);
-  font-size: var(--text-xs);
+  color: #6f6a62;
+  font-size: 12px;
   letter-spacing: .1em;
   text-transform: uppercase;
 }
 
-.flashsale__clock { align-items: center; display: flex; gap: var(--space-2); }
+.flashsale__clock { align-items: center; display: flex; gap: 8px; }
 
 .flashsale__unit { display: grid; justify-items: center; }
 
 .flashsale__digits {
-  background: var(--color-surface);
-  border-radius: var(--radius-s);
-  font-size: var(--text-xl);
+  background: #ffffff;
+  border-radius: 4px;
+  font-size: 24px;
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   min-width: 46px;
-  padding: var(--space-2) var(--space-3);
+  padding: 8px 12px;
   text-align: center;
 }
 
 .flashsale__unit-label {
-  color: var(--color-muted);
+  color: #6f6a62;
   font-size: 10px;
   letter-spacing: .1em;
-  margin-top: var(--space-1);
+  margin-top: 4px;
   text-transform: uppercase;
 }
 
-.flashsale__sep { color: var(--color-muted); font-size: var(--text-l); margin-bottom: var(--space-5); }
+.flashsale__sep { color: #6f6a62; font-size: 18px; margin-bottom: 24px; }
