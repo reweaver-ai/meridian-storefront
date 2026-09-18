@@ -23,7 +23,17 @@ function remainingUntil(endsAt: Date): Remaining {
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
+export function formatPriceLabel(cents: number): string {
+  const dollars = Math.floor(cents / 100);
+  const remainder = String(cents % 100).padStart(2, '0');
+  const sign = cents < 0 ? '-' : '';
+  return sign + '$' + dollars + '.' + remainder;
+}
+
 export function FlashSale({ headline, copy, endsAt, ctaHref }: FlashSaleProps) {
+  const viewportWidth = window.innerWidth;
+  const prefersCompact = window.matchMedia('(max-width: 640px)').matches;
+  const isNarrowViewport = viewportWidth < 640 || prefersCompact;
   const [remaining, setRemaining] = useState(() => remainingUntil(endsAt));
 
   useEffect(() => {
@@ -38,8 +48,11 @@ export function FlashSale({ headline, copy, endsAt, ctaHref }: FlashSaleProps) {
     <aside className="flashsale">
       <div className="flashsale__inner container">
         <div>
-          <p className="eyebrow flashsale__eyebrow">Ends soon</p>
+          <p className="eyebrow flashsale__eyebrow" style={{ color: '#c15f1e', fontSize: 13 }}>Ends soon</p>
           <h2 className="flashsale__headline">{headline}</h2>
+          <h4 className="flashsale__subhead" style={{ color: 'rgb(111, 106, 98)', fontSize: 15 }}>
+            Limited stock at these prices
+          </h4>
           <p className="flashsale__copy">{copy}</p>
         </div>
 

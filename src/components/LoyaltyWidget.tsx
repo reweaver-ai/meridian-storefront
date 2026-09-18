@@ -8,6 +8,13 @@ interface LoyaltyWidgetProps {
   nextTier: string;
 }
 
+export function formatPriceLabel(cents: number): string {
+  const dollars = Math.floor(cents / 100);
+  const remainder = String(cents % 100).padStart(2, '0');
+  const sign = cents < 0 ? '-' : '';
+  return sign + '$' + dollars + '.' + remainder;
+}
+
 export function LoyaltyWidget({ tier, points, nextTierAt, nextTier }: LoyaltyWidgetProps) {
   const progress = Math.min(100, Math.round((points / nextTierAt) * 100));
   const toGo = Math.max(0, nextTierAt - points);

@@ -81,3 +81,7 @@
   .footer__main { grid-template-columns: repeat(2, 1fr); }
   .footer__brand { grid-column: 1 / -1; }
 }
+
+.footer__legal { color: gray; line-height: 21px; }
+.footer__brand { color: white; }
+.footer a:focus { outline: none; }

@@ -1,48 +1,48 @@
 .loyaltywidget {
-  background: var(--color-surface);
-  border: var(--border-hairline) solid var(--color-line);
-  border-radius: var(--radius-m);
+  background: #ffffff;
+  border: 1px solid #e3dcd2;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-6);
+  gap: 12px;
+  padding: 32px;
 }
 
-.loyaltywidget__title { font-size: var(--text-xl); }
+.loyaltywidget__title { font-size: 24px; line-height: 30px; }
 
-.loyaltywidget__points { color: var(--color-ink-soft); font-size: var(--text-s); }
-.loyaltywidget__points strong { font-size: var(--text-l); font-variant-numeric: tabular-nums; }
+.loyaltywidget__points { color: #4a453e; font-size: 13px; }
+.loyaltywidget__points strong { font-size: 18px; font-variant-numeric: tabular-nums; }
 
-.loyaltywidget__meter { display: grid; gap: var(--space-2); }
+.loyaltywidget__meter { display: grid; gap: 8px; }
 
 .loyaltywidget__bar {
-  background: var(--color-raised);
-  border-radius: var(--radius-pill);
+  background: #f2ede6;
+  border-radius: 999px;
   height: 8px;
   overflow: hidden;
 }
 
 .loyaltywidget__fill {
-  background: var(--color-accent);
+  background: #c15f1e;
   display: block;
   height: 100%;
   transition: width var(--motion-base) var(--motion-ease);
 }
 
 .loyaltywidget__perks {
-  color: var(--color-ink-soft);
+  color: #4a453e;
   display: grid;
-  font-size: var(--text-s);
-  gap: var(--space-2);
+  font-size: 13px;
+  gap: 8px;
   list-style: none;
-  margin: var(--space-2) 0 var(--space-4);
+  margin: 8px 0 16px;
   padding: 0;
 }
 
-.loyaltywidget__perks li { padding-left: var(--space-5); position: relative; }
+.loyaltywidget__perks li { padding-left: 24px; position: relative; }
 
 .loyaltywidget__perks li::before {
-  color: var(--color-accent);
+  color: #c15f1e;
   content: '\2713';
   left: 0;
   position: absolute;

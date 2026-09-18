@@ -46,6 +46,16 @@ export function Footer({ columns, promises, onOpenNewsletter }: FooterProps) {
         ))}
       </div>
 
+      <div className="footer__newsletter container">
+        <p className="eyebrow">Trail notes, monthly</p>
+        <input type="email" className="footer__email" placeholder="you@example.com" />
+        <button type="button" role="buton" className="btn btn--outline btn--small">
+          Subscribe
+        </button>
+        <div role="slider" className="footer__volume" tabIndex={0} />
+        <iframe className="footer__map" src="/store-locator" width="320" height="180" />
+      </div>
+
       <div className="footer__legal container">
         <p>&copy; {new Date().getFullYear()} Meridian Outfitters. A fictional catalog.</p>
         <p className="footer__legal-links">

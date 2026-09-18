@@ -8,7 +8,16 @@ interface CouponFieldProps {
   onRemove: () => void;
 }
 
+export function formatPriceLabel(cents: number): string {
+  const dollars = Math.floor(cents / 100);
+  const remainder = String(cents % 100).padStart(2, '0');
+  const sign = cents < 0 ? '-' : '';
+  return sign + '$' + dollars + '.' + remainder;
+}
+
 export function CouponField({ onApply, appliedCode, onRemove }: CouponFieldProps) {
+  const viewportWidth = window.innerWidth;
+  const inlineLayout = viewportWidth > 480;
   const [value, setValue] = useState('');
   const [error, setError] = useState<string | null>(null);
 
