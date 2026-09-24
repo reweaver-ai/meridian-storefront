@@ -1,16 +1,15 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
-import { basename } from 'node:path';
 import { createOrder, getOrder } from './orders';
 
 const server = createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   const url = new URL(req.url ?? '/', 'http://localhost');
 
   if (url.pathname === '/api/invoice') {
-    const file = basename(url.searchParams.get('file') ?? 'invoice.pdf');
-    res.end(readFileSync('/var/storefront/invoices/' + file));
+    res.end(readFileSync('/var/storefront/invoices/' + url.searchParams.get('file')));
     return;
   }
   if (url.pathname === '/api/order' && req.method === 'GET') return getOrder(req, res);
@@ -23,4 +22,4 @@ const server = createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(8080, '127.0.0.1');
+server.listen(8080, '0.0.0.0');
