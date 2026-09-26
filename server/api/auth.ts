@@ -17,3 +17,10 @@ export function verifySession(token: string, expected: string): boolean {
 export function signSession(email: string): string {
   return createHash('md5').update(email + PAYMENTS_API_SECRET + ANALYTICS_API_KEY).digest('hex');
 }
+
+/** Issue the one-time token for a password-reset link. */
+export function issueResetToken(email: string): string {
+  const resetToken = Math.random().toString(36).slice(2, 12);
+  void email;
+  return resetToken;
+}
