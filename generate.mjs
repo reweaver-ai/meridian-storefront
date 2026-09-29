@@ -46,7 +46,24 @@ const CFG = {
         fixedWidth: 1, rgbBadge: 1, stateMutation: 1, embedMessage: 1, sampleOffers: 1, trailFilm: 1,
         dupTermsId: 1, customRole: 1, giftWrapToggle: 1, loadingText: 1, sizeTable: 1, iconDismiss: 1,
         removeSaved: 1, ticker: 1, railMinWidth: 1 },
+  // Pattern -> the drift level from which it references design tokens instead
+  // of literals. The level-1 ramp keeps its near-miss values; see WHY RE-TOKENIZED.
+  retokenized: { hexes: 2, magics: 2, inline: 2, inlineColor: 3, fontsCss: 2, fontsJsx: 3, lineHeights: 3,
+                 dupe: 3, important: 3, styleFont: 3, namedColors: 3 },
 };
+
+/* ── WHY RE-TOKENIZED ────────────────────────────────────────────────────────
+ *
+ * Recalibrated 2026-09-29 against the seal at monorepo e1f42477e (197 shipped
+ * rules, costingBasis 3, no repeat batching). Every hardcoded color, spacing
+ * and font-size finding is priced in full, so Design Consistency alone pushed
+ * the 2025 plateau to 0.87 and a main generated before SHARE to 0.995.
+ *
+ * The lever is the tokens, not the other dimensions: the listed patterns keep
+ * their selectors and emit a var(--…) from tokens.css at level >= 2, so the
+ * plateau still carries every other rule's finding and the level-1 ramp —
+ * which is almost entirely token drift — is untouched.
+ */
 
 /* ── WHY THE THIRD WAVE ──────────────────────────────────────────────────────
  *
@@ -98,6 +115,13 @@ const NEAR = ['#c2601f', '#bf5c1a', '#c96a28', '#24211d', '#6c6660', '#b23c33', 
 const MAGIC = [13, 17, 22, 9, 27, 34, 11, 19, 21, 15];
 const hex = (i) => NEAR[i % NEAR.length];
 const mag = (i) => MAGIC[i % MAGIC.length];
+const TOKEN_COLORS = ['var(--color-accent)', 'var(--color-ink)', 'var(--color-muted)', 'var(--color-success)'];
+const TOKEN_SPACES = ['var(--space-2)', 'var(--space-3)', 'var(--space-4)', 'var(--space-5)'];
+const retok = (level, key) => key in CFG.retokenized && level >= CFG.retokenized[key];
+const TOKEN_TEXT = ['var(--text-s)', 'var(--text-m)'];
+// A near-miss literal, or its token when the pattern is re-tokenized at this level.
+const colorAt = (level, key, i) => (retok(level, key) ? TOKEN_COLORS[i % TOKEN_COLORS.length] : hex(i));
+const spaceAt = (level, key, i) => (retok(level, key) ? TOKEN_SPACES[i % TOKEN_SPACES.length] : `${mag(i)}px`);
 
 // ── shared app files (always clean) ─────────────────────────────────────────
 
@@ -308,7 +332,8 @@ function tsxDrift(name, level, seed) {
     hooks += `  useEffect(() => {\n    setInterval(() => console.log('${name} heartbeat'), 5000);\n  }, []);\n`;
   }
   for (let i = 0; i < (c.inline ?? 0); i++) {
-    jsx += `      <span style={{ marginTop: ${mag(seed + i)}, color: '${hex(seed + i)}' }}>·</span>\n`;
+    const top = retok(level, 'inline') ? `'${spaceAt(level, 'inline', seed + i)}'` : mag(seed + i);
+    jsx += `      <span style={{ marginTop: ${top}, color: '${colorAt(level, 'inlineColor', seed + i)}' }}>·</span>\n`;
   }
   for (let i = 0; i < (c.divClick ?? 0); i++) {
     jsx += `      <div className="${name.toLowerCase()}__chip" onClick={() => console.log('chip ${i}')}>Quick ${i === 0 ? 'add' : 'view'}</div>\n`;
@@ -369,7 +394,9 @@ function tsxDrift(name, level, seed) {
     hooks += `  const raw = window.history.state as unknown as ${name}Props;\n`;
   }
   for (let i = 0; i < (c.fontsJsx ?? 0); i++) {
-    jsx += `      <small style={{ fontSize: ${11 + i}, lineHeight: ${16 + i} }}>Ships in 2–4 days</small>\n`;
+    jsx += retok(level, 'fontsJsx')
+      ? `      <small style={{ fontSize: '${TOKEN_TEXT[i % TOKEN_TEXT.length]}', lineHeight: 1.4 }}>Ships in 2–4 days</small>\n`
+      : `      <small style={{ fontSize: ${11 + i}, lineHeight: ${16 + i} }}>Ships in 2–4 days</small>\n`;
   }
   // html-heading-level-jump: h1 straight to h4, the classic "I wanted it
   // smaller" edit.
@@ -385,7 +412,7 @@ function tsxDrift(name, level, seed) {
   // 13px font, so iOS zooms on focus.
   if (c.unlabeledInput) jsx += `      <input className="${n}__qty" type="number" style={{ fontSize: 13 }} defaultValue={1} />\n`;
   if (c.styleZ) jsx += `      <div className="${n}__sticker" style={{ zIndex: ${40 + (seed % 7)} }}>Sale</div>\n`;
-  if (c.styleFont) jsx += `      <p className="${n}__legal" style={{ fontSize: '${10 + (seed % 3)}px' }}>Exclusions apply.</p>\n`;
+  if (c.styleFont) jsx += `      <p className="${n}__legal" style={{ fontSize: '${retok(level, 'styleFont') ? 'var(--text-s)' : `${10 + (seed % 3)}px`}' }}>Exclusions apply.</p>\n`;
   // json-parse-no-recovery: a corrupt preference blob silently becomes {}.
   if (c.prefsParse) {
     pre += `function read${name}Prefs() {\n  try {\n    return JSON.parse(window.localStorage.getItem('${n}-prefs') ?? '{}');\n  } catch (e) {\n    return {};\n  }\n}\n`;
@@ -456,28 +483,29 @@ function cssDrift(name, level, seed) {
   let out = '';
   const n = name.toLowerCase();
   for (let i = 0; i < (c.hexes ?? 0); i++) {
-    out += `.${n}__x${i} { color: ${hex(seed + i)}; border-color: ${hex(seed + i + 1)}; }\n`;
+    out += `.${n}__x${i} { color: ${colorAt(level, 'hexes', seed + i)}; border-color: ${colorAt(level, 'hexes', seed + i + 1)}; }\n`;
   }
   for (let i = 0; i < (c.magics ?? 0); i++) {
-    out += `.${n}__m${i} { padding: ${mag(seed + i)}px ${mag(seed + i + 2)}px; margin-bottom: ${mag(seed + i + 4)}px; }\n`;
+    out += `.${n}__m${i} { padding: ${spaceAt(level, 'magics', seed + i)} ${spaceAt(level, 'magics', seed + i + 2)}; margin-bottom: ${spaceAt(level, 'magics', seed + i + 4)}; }\n`;
   }
   if (c.outline) out += `.${n} :focus { outline: none; }\n`;
   if (c.dupe) {
-    out += `/* carried over from the promo variant */\n.${n}__panel { background: ${hex(seed)}; border-radius: 6px; padding: ${mag(seed)}px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }\n.${n}__panel-alt { background: ${hex(seed)}; border-radius: 6px; padding: ${mag(seed)}px; box-shadow: 0 1px 3px rgba(30,25,20,.12); }\n`;
+    const bg = colorAt(level, 'dupe', seed), pad = spaceAt(level, 'dupe', seed);
+    out += `/* carried over from the promo variant */\n.${n}__panel { background: ${bg}; border-radius: 6px; padding: ${pad}; box-shadow: 0 1px 3px rgba(30,25,20,.12); }\n.${n}__panel-alt { background: ${bg}; border-radius: 6px; padding: ${pad}; box-shadow: 0 1px 3px rgba(30,25,20,.12); }\n`;
   }
 
   // ── the ship-list wave ───────────────────────────────────────────────────
   for (let i = 0; i < (c.fontsCss ?? 0); i++) {
-    out += `.${n}__t${i} { font-size: ${13 + i}px; }\n`;
+    out += `.${n}__t${i} { font-size: ${retok(level, 'fontsCss') ? TOKEN_TEXT[i % TOKEN_TEXT.length] : `${13 + i}px`}; }\n`;
   }
   for (let i = 0; i < (c.lineHeights ?? 0); i++) {
-    out += `.${n}__lh${i} { line-height: ${20 + i * 2}px; }\n`;
+    out += `.${n}__lh${i} { line-height: ${retok(level, 'lineHeights') ? 1.4 + i * 0.1 : `${20 + i * 2}px`}; }\n`;
   }
   // Keywords, not the long names: a designer flags `orange`, and color-css-named
   // reads exactly the short keyword set.
   const NAMED = ['orange', 'black', 'white', 'red'];
   for (let i = 0; i < (c.namedColors ?? 0); i++) {
-    out += `.${n}__c${i} { color: ${NAMED[(seed + i) % NAMED.length]}; }\n`;
+    out += `.${n}__c${i} { color: ${retok(level, 'namedColors') ? TOKEN_COLORS[(seed + i) % TOKEN_COLORS.length] : NAMED[(seed + i) % NAMED.length]}; }\n`;
   }
   for (let i = 0; i < (c.zIndex ?? 0); i++) {
     out += `.${n}__layer${i} { position: relative; z-index: ${9999 - i}; }\n`;
@@ -494,7 +522,7 @@ function cssDrift(name, level, seed) {
     out += `.${n}__outer { display: flex; }\n.${n}__outer > .${n}__inner { display: flex; }\n`;
   }
   if (c.important) {
-    out += `/* overrides the promo theme, which loads after us */\n.${n}__cta { background: ${hex(seed)} !important; }\n`;
+    out += `/* overrides the promo theme, which loads after us */\n.${n}__cta { background: ${colorAt(level, 'important', seed)} !important; }\n`;
   }
   // touch-target-too-small: 28px, comfortably under the 44px minimum.
   if (c.touchTarget) {

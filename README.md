@@ -5,30 +5,33 @@ against the real scan engine so the Production Drift Rating sweeps the bands:
 Minimal start, a Severe peak, a remediation dip into Low, and a creep back into
 High that ends below the peak.
 
-Last calibrated 2026-09-16 against **tray build 79's costing** — every finding
-charged the flat fix-minutes of its severity (95/28/12), no repeat batching —
-which is what users see in build 79 and what the hosted engine reports from
-reweaver-ai#3518 on. Findings came from production's seal (Cloud Run revision
-`drift-detector-00336`, 137 shipped rules). The hosted chart's default view
-samples 10 commits evenly across the 44 (indexes 0, 5, 10, 14, 19, 24, 29, 33,
-38, 43), and the plan is shaped for those points:
+Last calibrated 2026-09-29 against the seal at monorepo `e1f42477e` (Cloud Run
+revision `drift-detector-00349`, 197 shipped rules, `costingBasis` 3, no repeat
+batching). Under that costing every hardcoded color, spacing and font-size
+finding is priced in full, so the peak is set by `CFG.retokenized`: the listed
+patterns reference tokens from `tokens.css` at and above their level, and the
+level-1 ramp keeps its near-miss literals. Scored on every commit of `main`
+(the 44 generated here plus the six hand commits replayed on top):
 
-| sample | commit | PDR |
+| index | commit | PDR |
 |---|---|---|
 | 0  | 2023-05-16 scaffold | 0.03 Minimal |
-| 5  | 2023-09-05 checkout form | 0.09 Minimal |
-| 10 | 2024-03-05 price tag | 0.27 Low |
-| 14 | 2024-07-09 order summary | 0.44 Moderate |
-| 19 | 2024-10-22 recommendation rail | 0.62 High |
-| 24 | 2025-03-11 rich review bodies | 0.77 Severe — peak |
-| 29 | 2025-07-29 security fix, sprint ends | 0.28 Low — dip |
+| 5  | 2023-09-05 checkout form | 0.11 Minimal |
+| 10 | 2024-03-05 price tag | 0.25 Low |
+| 14 | 2024-07-09 order summary | 0.38 Moderate |
+| 19 | 2024-10-22 recommendation rail | 0.55 High |
+| 24 | 2025-03-11 rich review bodies | 0.68 High |
+| 25–27 | 2025-04 → 2025-06 express checkout, loyalty, hotfixes | 0.74 / 0.76 / 0.76 Severe — peak |
+| 29 | 2025-07-29 security fix, sprint ends | 0.31 Moderate |
 | 33 | 2025-11-04 black friday countdown | 0.31 Moderate |
-| 38 | 2026-03-10 spring campaign banners | 0.55 High |
-| 43 | 2026-08-11 landing refresh (HEAD) | 0.63 High |
+| 38 | 2026-03-10 spring campaign banners | 0.46 Moderate |
+| 43 | 2026-08-11 landing refresh (last generated commit) | 0.54 High |
+| 49 | 2026-09-17 main HEAD (hand commits) | 0.65 High |
 
-Between samples the plateau reaches 0.84 (2025-05/06) and the sprint bottoms
-at 0.17 (2025-08-12); a narrowed chart range shows both. HEAD: 126
-drift-hours, 44 shipped rules firing, 63 files.
+The sprint bottoms at 0.22 (2025-08-12). 71 rules fire somewhere in the
+history. Re-tokenizing never removes a rule's only emitter: the inline JSX
+color and the rgba badge stay literal where they are the sole source of
+`color-jsx-hex`, `hardcoded-color` and `color-jsx-rgb`.
 
 The tree carries a **checkout API** (`server/api/`) as well as the React app,
 because almost nothing in the Security dimension is a client-side pattern and a
