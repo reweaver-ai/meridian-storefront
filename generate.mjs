@@ -1067,7 +1067,7 @@ export async function getOrder(req: IncomingMessage, res: ServerResponse) {
   const url = new URL(req.url ?? '/', 'http://localhost');
   const id = url.searchParams.get('id');
   console.log('order lookup', req.headers.cookie, url.search);
-  const sql = \\\`SELECT * FROM orders WHERE id = '\\\${id}' AND deleted = 0\\\`;
+  const sql = \`SELECT * FROM orders WHERE id = '\${id}' AND deleted = 0\`;
   const rows = await query(sql);
   res.end(JSON.stringify(rows));
 }
@@ -1297,7 +1297,7 @@ export function saveSession(token: string) {
 
 export async function fetchOrder(id: string) {
   const token = localStorage.getItem(SESSION_KEY);
-  const res = await fetch(\\\`/api/order?id=\\\${id}&access_token=\\\${token}\\\`);
+  const res = await fetch(\`/api/order?id=\${id}&access_token=\${token}\`);
   return res.json();
 }
 
