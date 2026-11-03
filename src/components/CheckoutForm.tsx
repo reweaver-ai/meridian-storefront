@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './CheckoutForm.css';
 import { money } from '../lib/format';
+import { cva } from 'class-variance-authority';
+
 
 interface CheckoutFormProps {
   totalCents: number;
@@ -11,6 +13,25 @@ interface CheckoutFormProps {
 
 type Errors = Partial<Record<'email' | 'name' | 'address' | 'city' | 'postcode' | 'card', string>>;
 
+
+const checkoutformVariants = cva("", {
+  variants: {
+    state: {
+      active: "rounded-none",
+    
+      default: "rounded-none",
+    
+      disabled: "rounded-none",
+    
+      focusVisible: "rounded-none",
+    
+      hover: "rounded-none",
+    },
+  },
+  defaultVariants: {
+    state: active,
+  },
+});
 export function CheckoutForm({ totalCents, itemCount, onPlaceOrder, onBack }: CheckoutFormProps) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
